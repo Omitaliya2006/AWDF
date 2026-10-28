@@ -14,6 +14,7 @@
 | Practical No. | Title | Tech Stack | Status | Directory |
 | :---: | :--- | :--- | :---: | :--- |
 | **Practical 1** | Introduction to React and Component Architecture (Student Portfolio) | React 19, Vite, Modular CSS | ✅ Completed | [Practical-1](./Practical-1) |
+| **Practical 2** | State Management and Routing in React (Multi-Page SPA) | React 19, React Router v7, useState | ✅ Completed | [Practical-2](./Practical-2) |
 
 ---
 
@@ -25,3 +26,13 @@
   - Dynamic array rendering with `.map()` in `Skills.jsx`
   - 3 Featured Projects: MediSlip, HRMS, House Price Predictor
   - Dynamic Props Controller Playground for real-time reactivity testing
+
+---
+
+## 🧭 Practical 2 Overview
+- **Objective:** Implement client-side multi-page routing with `react-router-dom` and reactive state management using `useState`.
+- **Key Features:**
+  - Multi-page navigation: `/` (Home), `/projects` (Projects), `/contact` (Contact), `*` (Custom 404 Error page)
+  - Seamless SPA route transitions with `NavLink` (no full page reloads)
+  - Controlled form inputs bound to `useState` with real-time character counter and live state mirror
+  - Reactive UI visibility toggles: Dark/Light mode theme toggle, help modal, project architecture modal, and viva guide

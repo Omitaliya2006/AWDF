@@ -1,0 +1,71 @@
+/* NotFound Page Styles */
+.notfound-card {
+  text-align: center;
+  max-width: 600px;
+  margin: 3rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 3.5rem 2.5rem;
+}
+
+.notfound-code-badge {
+  font-family: var(--font-heading);
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--accent-rose);
+  text-shadow: 0 0 25px rgba(244, 63, 94, 0.4);
+  line-height: 1;
+}
+
+.notfound-title {
+  font-size: 1.85rem;
+  font-weight: 700;
+}
+
+.notfound-desc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.unknown-path {
+  font-family: var(--font-mono);
+  background: rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.notfound-meta-box {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  text-align: left;
+  border-color: var(--border-color);
+}
+
+.notfound-meta-box h4 {
+  font-size: 0.85rem;
+  color: var(--primary-color);
+  margin-bottom: 0.35rem;
+}
+
+.notfound-meta-box p {
+  font-size: 0.825rem;
+  color: var(--text-secondary);
+}
+
+.notfound-meta-box code {
+  font-family: var(--font-mono);
+  color: #38bdf8;
+}
+
+.notfound-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
