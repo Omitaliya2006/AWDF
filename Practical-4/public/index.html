@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practical 4: Task Manager RESTful API | Om Italiya (24IT029)</title>
+  <meta name="description" content="Practical 4: Building a RESTful API with Node.js and Express by Om Italiya (24IT029) - CSPIT CHARUSAT." />
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-theme="dark">
+  <div class="app-layout">
+    <!-- Navbar Header -->
+    <header class="navbar">
+      <div class="navbar-container">
+        <div class="brand-group">
+          <span class="brand-icon">⚡</span>
+          <div>
+            <h1 class="brand-title">Task Manager RESTful API</h1>
+            <span class="brand-badge">Om Italiya • 24IT029 • AWDF Practical 4</span>
+          </div>
+        </div>
+
+        <div class="navbar-right">
+          <div class="server-status-pill">
+            <span class="pulse-dot"></span>
+            <span>Express Server Active (Port 5000)</span>
+          </div>
+          <button id="themeToggleBtn" class="icon-btn" title="Toggle Dark/Light Mode">☀️</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Dashboard Container -->
+    <main class="main-content">
+      <!-- Hero Academic Overview -->
+      <section class="card hero-card">
+        <div class="hero-top">
+          <span class="practical-tag">CO2 / PO3, PO5 • Node.js & Express</span>
+          <h2 class="hero-heading">RESTful Backend & Express Middleware Pipeline</h2>
+          <p class="hero-subtext">
+            Implements complete CRUD endpoints with in-memory storage, request logging middleware, Content-Type validation, Task ID format checking, and centralized global error handling.
+          </p>
+        </div>
+
+        <div class="academic-meta-grid">
+          <div class="meta-item">
+            <span class="meta-lbl">Student Name</span>
+            <strong class="meta-val">Om Italiya</strong>
+          </div>
+          <div class="meta-item">
+            <span class="meta-lbl">Roll Number</span>
+            <strong class="meta-val">24IT029</strong>
+          </div>
+          <div class="meta-item">
+            <span class="meta-lbl">Institution</span>
+            <strong class="meta-val">CSPIT - CHARUSAT</strong>
+          </div>
+          <div class="meta-item">
+            <span class="meta-lbl">Course</span>
+            <strong class="meta-val">AWDF (5th Semester)</strong>
+          </div>
+        </div>
+
+        <!-- Pipeline Architecture Visualizer -->
+        <div class="pipeline-flow">
+          <div class="flow-step">
+            <span class="flow-num">1</span>
+            <div>
+              <strong>CORS & Logger</strong>
+              <span>Global Request Timing</span>
+            </div>
+          </div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step">
+            <span class="flow-num">2</span>
+            <div>
+              <strong>express.json()</strong>
+              <span>Body Parser</span>
+            </div>
+          </div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step">
+            <span class="flow-num">3</span>
+            <div>
+              <strong>Express Router</strong>
+              <span>/tasks CRUD Routes</span>
+            </div>
+          </div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step">
+            <span class="flow-num">4</span>
+            <div>
+              <strong>404 Handler</strong>
+              <span>Structured Fallback</span>
+            </div>
+          </div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step error-step">
+            <span class="flow-num">5</span>
+            <div>
+              <strong>Global Error Handler</strong>
+              <span>(err, req, res, next)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Action Testing Bar -->
+      <section class="card action-bar-card">
+        <div class="action-bar-header">
+          <h3>⚡ Quick Endpoint Simulation</h3>
+          <span class="action-desc">Click any button below to trigger live API requests and verify status codes:</span>
+        </div>
+        <div class="quick-btn-group">
+          <button id="btnFetchAll" class="btn btn-primary">GET /tasks (200 OK)</button>
+          <button id="btnFetchOne" class="btn btn-secondary">GET /tasks/1 (200 OK)</button>
+          <button id="btnFetchNotFound" class="btn btn-secondary">GET /tasks/999 (404)</button>
+          <button id="btnSimulateError" class="btn btn-danger">GET /simulate-error (500 Error)</button>
+          <button id="btnTestInvalidRoute" class="btn btn-warning">GET /undefined-route (404 JSON)</button>
+          <button id="btnTestInvalidId" class="btn btn-warning">GET /tasks/abc (400 Format)</button>
+        </div>
+      </section>
+
+      <!-- Two-Column Layout: Task Manager & Response Inspector -->
+      <div class="dashboard-columns">
+        <!-- Left Column: Task Creator & Task List -->
+        <div class="column-left">
+          <!-- Create Task Form -->
+          <section class="card form-card">
+            <div class="card-header">
+              <h3>📝 Create New Task (POST /tasks)</h3>
+              <span class="badge badge-success">HTTP 201</span>
+            </div>
+
+            <form id="createTaskForm" class="task-form">
+              <div class="form-group">
+                <label for="taskTitle">Task Title *</label>
+                <input type="text" id="taskTitle" placeholder="e.g. Implement MongoDB connection" required />
+              </div>
+
+              <div class="form-group">
+                <label for="taskDesc">Description</label>
+                <textarea id="taskDesc" rows="2" placeholder="Task details, instructions, or notes..."></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="taskStatus">Status</label>
+                  <select id="taskStatus">
+                    <option value="pending">Pending</option>
+                    <option value="in-progress">In-Progress</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="taskPriority">Priority</label>
+                  <select id="taskPriority">
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary submit-btn">
+                <span>Create Task</span>
+                <span>➕</span>
+              </button>
+            </form>
+          </section>
+
+          <!-- Current Tasks List -->
+          <section class="card list-card">
+            <div class="card-header">
+              <div class="header-left">
+                <h3>📋 Tasks in Memory</h3>
+                <span id="taskCountBadge" class="count-badge">0 tasks</span>
+              </div>
+              <button id="btnRefreshTasks" class="btn btn-sm btn-secondary" title="Refresh task list">Refresh ↺</button>
+            </div>
+
+            <div id="tasksContainer" class="tasks-container">
+              <div class="loading-state">Loading tasks from Express server...</div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Column: Live Response & Server Logs -->
+        <div class="column-right">
+          <!-- Live API Response Inspector -->
+          <section class="card inspector-card">
+            <div class="card-header">
+              <div class="header-left">
+                <h3>🔍 HTTP Response Inspector</h3>
+                <span id="statusCodeBadge" class="status-badge status-200">200 OK</span>
+              </div>
+              <span id="responseDuration" class="time-tag">0ms</span>
+            </div>
+
+            <div class="request-meta-row">
+              <span id="lastRequestMethod" class="method-tag method-get">GET</span>
+              <code id="lastRequestUrl" class="url-code">/tasks</code>
+            </div>
+
+            <div class="response-viewer">
+              <pre><code id="responseJson">// Click any button to inspect server JSON response...</code></pre>
+            </div>
+          </section>
+
+          <!-- Live Server Request Logs -->
+          <section class="card logs-card">
+            <div class="card-header">
+              <div class="header-left">
+                <h3>📜 Live Server Logs (Middleware Pipeline)</h3>
+                <span class="pulse-dot"></span>
+              </div>
+              <button id="btnClearLogs" class="btn btn-sm btn-secondary">Clear</button>
+            </div>
+            <div id="logsContainer" class="logs-container">
+              <!-- Dynamically populated from /api/logs -->
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Theory & Viva Section -->
+      <section class="card viva-card">
+        <h3 class="viva-title">🎓 Key Analysis & Viva Questions (Practical 4)</h3>
+        <div class="viva-grid">
+          <div class="viva-item">
+            <h4>1. Why must the error handling middleware be defined last in the middleware chain?</h4>
+            <p>
+              Express executes middleware sequentially in the order registered via <code>app.use()</code>. If the error handler were defined before routes, an error thrown by a downstream route would have already bypassed it. Defining it last ensures that whenever a route or middleware invokes <code>next(err)</code>, Express skips all subsequent regular middleware and delegates straight to the 4-argument error handler.
+            </p>
+          </div>
+
+          <div class="viva-item">
+            <h4>2. What is the difference between app.use() and a route-specific middleware?</h4>
+            <p>
+              <code>app.use()</code> mounts middleware globally across every incoming request (or all requests matching a base path prefix, such as <code>/tasks</code>). Route-specific middleware is passed directly as arguments to a specific route definition (e.g. <code>router.get('/:id', validateTaskId, controller)</code>), executing only for that exact endpoint.
+            </p>
+          </div>
+
+          <div class="viva-item">
+            <h4>3. Why is it considered bad practice to send raw error stack traces to the client?</h4>
+            <p>
+              Raw stack traces expose internal implementation details—such as server directory paths, database table names, installed package versions, and sensitive environment metadata. Attackers can exploit this information disclosure to execute targeted vulnerabilities. In production, stack traces must be logged privately server-side, while clients receive safe, structured JSON error codes.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <p>© 2026 <strong>Om Italiya (24IT029)</strong> • CSPIT (CHARUSAT) • Advanced Web Development Frameworks (AWDF)</p>
+        <div class="footer-pills">
+          <span class="pill">Node.js</span>
+          <span class="pill">Express.js</span>
+          <span class="pill">RESTful API</span>
+          <span class="pill">Middleware Pipeline</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

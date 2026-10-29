@@ -1,0 +1,27 @@
+{
+  "name": "task-manager-api-24it029",
+  "version": "1.0.0",
+  "description": "Practical 4: Building a RESTful API with Node.js and Express by Om Italiya (24IT029) - CSPIT CHARUSAT",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test_api.js"
+  },
+  "keywords": [
+    "express",
+    "rest-api",
+    "node",
+    "middleware",
+    "awdf",
+    "cspit",
+    "charusat"
+  ],
+  "author": "Om Italiya (24IT029)",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}
