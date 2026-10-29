@@ -19,6 +19,7 @@
 | **Practical 4** | Building a RESTful API with Node.js and Express | Node.js, Express.js, Middleware Pipeline | ✅ Completed | [Practical-4](./Practical-4) |
 | **Practical 5** | MongoDB Integration and Schema Design with Mongoose | Node.js, Express, MongoDB, Mongoose ODM | ✅ Completed | [Practical-5](./Practical-5) |
 | **Practical 6** | Full Stack Integration (React + Node.js/Express + MongoDB) | React 19, Vite, Express, MongoDB, Mongoose | ✅ Completed | [Practical-6](./Practical-6) |
+| **Practical 7** | Authentication and Middleware Pipeline | Node.js, Express, JWT, bcryptjs, React 19 | ✅ Completed | [Practical-7](./Practical-7) |
 
 ---
 
@@ -85,6 +86,19 @@
   - Robust Backend Pipeline: CORS configuration, request logger middleware with latency tracking, Mongoose schema validation with pre-save trimming hooks, and centralized error handling
   - Advanced HUD & Viva Prep: Real-time network architecture monitor, live HTTP request log stream, Mongoose schema contract viewer, and interactive oral examination viva guide
   - Automated Verification: Comprehensive 29-test evaluation suite (`test_fullstack.js`) verifying 100% distinction grade pass (20/20 marks)
+
+---
+
+## 🔐 Practical 7 Overview
+- **Objective:** Implement JWT-based authentication and input validation as part of the Express middleware pipeline for the full-stack Task Management application.
+- **Key Features:**
+  - User Registration with bcryptjs: Password salted and hashed (10 rounds) before MongoDB storage; passwords never exposed in JSON responses
+  - JWT Login Flow: Credentials verified using `bcrypt.compare`; returns signed JWT token with 1-hour expiration; tested via automated test suite
+  - Authentication Middleware: Protected task routes inspect `Authorization: Bearer <token>`; rejects missing, malformed, or expired tokens with HTTP 401; sets `req.user`
+  - Input Validation Middleware: Enforces 5 strict validation rules (email regex, password length $\ge 6$, name presence, title length $\ge 2$, priority enum); returns structured HTTP 400 Bad Request
+  - Error Response Structure: Consistent JSON responses (`success`, `error`, `message`, `statusCode`) with zero stack traces leaked
+  - Supplementary Solutions: `/auth/me` user profile endpoint, client-side auto-logout on 401 token expiry, interactive Pipeline HUD with JWT inspector, and automated 37-test evaluation suite (`test_auth.js`) with 100% distinction pass (20/20 marks)
+
 
 
 
