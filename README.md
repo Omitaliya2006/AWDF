@@ -15,6 +15,7 @@
 | :---: | :--- | :--- | :---: | :--- |
 | **Practical 1** | Introduction to React and Component Architecture (Student Portfolio) | React 19, Vite, Modular CSS | ✅ Completed | [Practical-1](./Practical-1) |
 | **Practical 2** | State Management and Routing in React (Multi-Page SPA) | React 19, React Router v7, useState | ✅ Completed | [Practical-2](./Practical-2) |
+| **Practical 3** | REST API Integration & Data Rendering in React | React 19, GitHub REST API, useEffect | ✅ Completed | [Practical-3](./Practical-3) |
 
 ---
 
@@ -36,3 +37,14 @@
   - Seamless SPA route transitions with `NavLink` (no full page reloads)
   - Controlled form inputs bound to `useState` with real-time character counter and live state mirror
   - Reactive UI visibility toggles: Dark/Light mode theme toggle, help modal, project architecture modal, and viva guide
+
+---
+
+## 🌐 Practical 3 Overview
+- **Objective:** Master asynchronous operations in React using `useEffect`, consume the live GitHub REST API, and handle `loading`, `error`, and `data` states with graceful fallbacks.
+- **Key Features:**
+  - RESTful Data Fetching: Fetches GitHub profile and public repositories concurrently using `fetch()` and `Promise.all` inside `useEffect`
+  - Lifecycle State Management: Dynamic `<Spinner />` for `loading`, `<ErrorMessage />` with retry mechanism for `error`, and `<RepoCard />` grid for `data`
+  - Clean Side-Effect Cleanup: Prevents memory leaks and race conditions using `AbortController`
+  - Supplementary Work: Dynamic username search with presets (`Omitaliya2006`, `facebook`, `vitejs`), live state monitor HUD, language filter dropdown, sorting options, API Inspector, and Viva Guide
+
