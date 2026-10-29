@@ -1,0 +1,28 @@
+{
+  "name": "in-memory-caching-taskmanager-24it029",
+  "version": "1.0.0",
+  "description": "Practical 9: In-Memory Caching and Query Optimization by Om Italiya (24IT029) - CSPIT CHARUSAT",
+  "private": true,
+  "scripts": {
+    "start:backend": "node backend/server.js",
+    "start:frontend": "npm run dev --prefix frontend",
+    "test": "node test_caching.js",
+    "build:frontend": "npm run build --prefix frontend"
+  },
+  "keywords": [
+    "node-cache",
+    "in-memory-caching",
+    "query-optimization",
+    "cache-invalidation",
+    "express",
+    "mongodb",
+    "mongoose",
+    "react",
+    "vite",
+    "awdf",
+    "cspit",
+    "charusat"
+  ],
+  "author": "Om Italiya (24IT029)",
+  "license": "MIT"
+}

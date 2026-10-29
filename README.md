@@ -21,6 +21,7 @@
 | **Practical 6** | Full Stack Integration (React + Node.js/Express + MongoDB) | React 19, Vite, Express, MongoDB, Mongoose | ✅ Completed | [Practical-6](./Practical-6) |
 | **Practical 7** | Authentication and Middleware Pipeline | Node.js, Express, JWT, bcryptjs, React 19 | ✅ Completed | [Practical-7](./Practical-7) |
 | **Practical 8** | Performance Optimization and Lazy Loading in React | React 19, Vite, React.lazy, Suspense | ✅ Completed | [Practical-8](./Practical-8) |
+| **Practical 9** | In-Memory Caching and Query Optimization | Node.js, Express, node-cache, MongoDB, React 19 | ✅ Completed | [Practical-9](./Practical-9) |
 
 ---
 
@@ -114,6 +115,22 @@
     - Interactive Performance HUD: Live before/after benchmark comparison matrix, chunk waterfall diagram, and React DevTools Profiler audit tab.
     - Oral Viva Examination Guide: 6 curated questions & detailed answers covering code splitting theory, browser network tab profiling, and React Suspense lifecycle.
   - Automated Verification: Comprehensive 34-test evaluation suite (`test_performance.js`) verifying 100% distinction grade pass (20/20 marks).
+
+---
+
+## ⚡ Practical 9 Overview
+- **Objective:** Implement server-side in-memory caching using `node-cache` in an Express and MongoDB backend, enforce cache invalidation across write operations to eliminate stale data, and measure the empirical latency impact.
+- **Key Features:**
+  - Cache-Aside (Lazy Loading) Pipeline: `GET /tasks` checks in-memory `node-cache` first (`all_tasks`); on HIT returns data immediately from RAM (<1ms); on MISS queries MongoDB, saves to cache with 60s TTL, and returns response (~16.5ms).
+  - Strict Cache Invalidation: Write operations (`POST`, `PUT`, `DELETE`) automatically trigger `cache.del('all_tasks')` and `cache.del('task_' + id)` to guarantee immediate cache coherence and eliminate stale reads.
+  - Empirical Latency Reduction: 5 sample readings demonstrate an empirical latency drop from **16.50 ms** down to **0.84 ms** (a **🔻 94.9% reduction** and **⚡ 19.6x speedup**).
+  - Supplementary Work:
+    - Single-Task Caching: `GET /tasks/:id` cached independently under `task_<id>`.
+    - Live Telemetry & Debug API: `/api/cache/stats` exposing hits, misses, hit rate %, active keys, and invalidations.
+    - Automated Empirical Benchmark API: `/api/cache/benchmark` executing high-resolution 5-trial tests.
+    - Interactive Cache Monitor HUD & Oral Viva Guide: Real-time cache hit indicator pills, flush button, bypass toggle switch, and 6 curated viva questions & answers.
+  - Automated Verification: Comprehensive 39-test evaluation suite (`test_caching.js`) verifying 100% distinction grade pass (20/20 marks).
+
 
 
 
