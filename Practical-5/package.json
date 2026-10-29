@@ -1,0 +1,30 @@
+{
+  "name": "task-manager-mongodb-24it029",
+  "version": "1.0.0",
+  "description": "Practical 5: MongoDB Integration and Schema Design with Mongoose by Om Italiya (24IT029) - CSPIT CHARUSAT",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test_api.js"
+  },
+  "keywords": [
+    "mongodb",
+    "mongoose",
+    "express",
+    "rest-api",
+    "schema-design",
+    "awdf",
+    "cspit",
+    "charusat"
+  ],
+  "author": "Om Italiya (24IT029)",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5"
+  }
+}

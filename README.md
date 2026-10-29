@@ -17,6 +17,7 @@
 | **Practical 2** | State Management and Routing in React (Multi-Page SPA) | React 19, React Router v7, useState | ✅ Completed | [Practical-2](./Practical-2) |
 | **Practical 3** | REST API Integration & Data Rendering in React | React 19, GitHub REST API, useEffect | ✅ Completed | [Practical-3](./Practical-3) |
 | **Practical 4** | Building a RESTful API with Node.js and Express | Node.js, Express.js, Middleware Pipeline | ✅ Completed | [Practical-4](./Practical-4) |
+| **Practical 5** | MongoDB Integration and Schema Design with Mongoose | Node.js, Express, MongoDB, Mongoose ODM | ✅ Completed | [Practical-5](./Practical-5) |
 
 ---
 
@@ -59,5 +60,18 @@
   - Custom Request Logger: Applied globally to log method, URL, timestamp, and duration for every request
   - Global Centralized Error Handler: 4-parameter `(err, req, res, next)` middleware defined last in pipeline to catch unhandled errors without crashing the server
   - Supplementary Work: `Content-Type: application/json` validator for POST/PUT (HTTP 415), route-specific task ID format validator (HTTP 400), structured 404 handler for undefined routes, automated 22-test evaluation suite, and interactive browser client dashboard
+
+---
+
+## 🍃 Practical 5 Overview
+- **Objective:** Connect a live MongoDB database to an Express server and enforce strict data validation through a Mongoose schema with pre-save hooks and centralized error handling.
+- **Key Features:**
+  - Live MongoDB Connection: Mongoose connection management to `mongodb://127.0.0.1:27017/awdf_task_manager_24it029` with event logging and `.env` isolation
+  - Validated Mongoose Schema: 6 fields (`title`, `description`, `completed`, `priority`, `createdAt`, `updatedAt`) with required constraints and default values
+  - Persistent CRUD Methods: Executed via `Task.find()`, `Task.create()`, `Task.findByIdAndUpdate()`, and `Task.findByIdAndDelete()`
+  - Pre-Save Hook: Automatically cleanses document inputs by trimming whitespace from titles and refreshing timestamps
+  - Validation Enforcement: Transforms Mongoose `ValidationError` and `CastError` into clean, descriptive JSON responses (HTTP 400)
+  - Supplementary Work: Priority enum constraint (`['low', 'medium', 'high']`), ObjectId format validator middleware, automated 25-test evaluation suite, and interactive browser client dashboard
+
 
 
