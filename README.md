@@ -20,6 +20,7 @@
 | **Practical 5** | MongoDB Integration and Schema Design with Mongoose | Node.js, Express, MongoDB, Mongoose ODM | ✅ Completed | [Practical-5](./Practical-5) |
 | **Practical 6** | Full Stack Integration (React + Node.js/Express + MongoDB) | React 19, Vite, Express, MongoDB, Mongoose | ✅ Completed | [Practical-6](./Practical-6) |
 | **Practical 7** | Authentication and Middleware Pipeline | Node.js, Express, JWT, bcryptjs, React 19 | ✅ Completed | [Practical-7](./Practical-7) |
+| **Practical 8** | Performance Optimization and Lazy Loading in React | React 19, Vite, React.lazy, Suspense | ✅ Completed | [Practical-8](./Practical-8) |
 
 ---
 
@@ -98,6 +99,21 @@
   - Input Validation Middleware: Enforces 5 strict validation rules (email regex, password length $\ge 6$, name presence, title length $\ge 2$, priority enum); returns structured HTTP 400 Bad Request
   - Error Response Structure: Consistent JSON responses (`success`, `error`, `message`, `statusCode`) with zero stack traces leaked
   - Supplementary Solutions: `/auth/me` user profile endpoint, client-side auto-logout on 401 token expiry, interactive Pipeline HUD with JWT inspector, and automated 37-test evaluation suite (`test_auth.js`) with 100% distinction pass (20/20 marks)
+
+---
+
+## ⚡ Practical 8 Overview
+- **Objective:** Improve frontend web application performance using route-based code splitting, `React.lazy()`, `<Suspense>`, and fallback UI to dramatically reduce initial JavaScript bundle size and Time to Interactive (TTI).
+- **Key Features:**
+  - Route-Based Code Splitting: Dynamically lazy loads all route components (`Home`, `Projects`, `Analytics`, `Contact`, `NotFound`) on demand via `React.lazy(() => import(...))`.
+  - Seamless Fallback UI: Global `<Suspense fallback={<PageLoader />}>` boundary displaying an animated spinner, visual layout skeleton, and real-time chunk loading progress bar.
+  - Measurable Performance Gains: Initial JavaScript transferred reduced from **358.4 KB** down to **138.2 KB** (a **61.4% reduction**); Time to Interactive on Slow 3G reduced by **71.2%** (from 2.85s to 0.82s).
+  - Supplementary Work:
+    - Heavy Component Isolation: Dynamic lazy loading for heavy data-visualization (`HeavyChart.jsx`).
+    - Network Throttling Simulation: In-app throttle controller (`instant`, `fast3g`, `slow3g`) with minimum delay fallback to prevent loader flickering.
+    - Interactive Performance HUD: Live before/after benchmark comparison matrix, chunk waterfall diagram, and React DevTools Profiler audit tab.
+    - Oral Viva Examination Guide: 6 curated questions & detailed answers covering code splitting theory, browser network tab profiling, and React Suspense lifecycle.
+  - Automated Verification: Comprehensive 34-test evaluation suite (`test_performance.js`) verifying 100% distinction grade pass (20/20 marks).
 
 
 
