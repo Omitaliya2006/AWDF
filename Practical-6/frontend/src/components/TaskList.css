@@ -1,0 +1,135 @@
+.task-list-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.skeleton-card {
+  height: 90px;
+  background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-tertiary) 50%, var(--bg-card) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.task-list-error {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.error-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.task-list-error h3 {
+  color: #fca5a5;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.task-list-error p {
+  color: var(--text-muted);
+  max-width: 500px;
+  margin: 0 auto 1.25rem auto;
+  font-size: 0.9rem;
+}
+
+.retry-btn {
+  background: var(--danger);
+  color: #ffffff;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.retry-btn:hover {
+  background: #dc2626;
+}
+
+.task-list-empty {
+  background: var(--bg-card);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 3rem 1.5rem;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.task-list-empty h3 {
+  color: var(--text-main);
+  font-size: 1.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.task-list-empty p {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  max-width: 420px;
+  margin: 0 auto 1.5rem auto;
+}
+
+.empty-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.empty-btn-primary {
+  background: var(--primary);
+  color: #ffffff;
+  padding: 0.55rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.empty-btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.empty-btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  padding: 0.55rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.empty-btn-secondary:hover {
+  background: var(--border-hover);
+  color: var(--text-main);
+}
+
+.task-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  padding: 0 0.25rem;
+}
+
+.task-count-text {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+

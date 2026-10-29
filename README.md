@@ -18,6 +18,7 @@
 | **Practical 3** | REST API Integration & Data Rendering in React | React 19, GitHub REST API, useEffect | ✅ Completed | [Practical-3](./Practical-3) |
 | **Practical 4** | Building a RESTful API with Node.js and Express | Node.js, Express.js, Middleware Pipeline | ✅ Completed | [Practical-4](./Practical-4) |
 | **Practical 5** | MongoDB Integration and Schema Design with Mongoose | Node.js, Express, MongoDB, Mongoose ODM | ✅ Completed | [Practical-5](./Practical-5) |
+| **Practical 6** | Full Stack Integration (React + Node.js/Express + MongoDB) | React 19, Vite, Express, MongoDB, Mongoose | ✅ Completed | [Practical-6](./Practical-6) |
 
 ---
 
@@ -72,6 +73,19 @@
   - Pre-Save Hook: Automatically cleanses document inputs by trimming whitespace from titles and refreshing timestamps
   - Validation Enforcement: Transforms Mongoose `ValidationError` and `CastError` into clean, descriptive JSON responses (HTTP 400)
   - Supplementary Work: Priority enum constraint (`['low', 'medium', 'high']`), ObjectId format validator middleware, automated 25-test evaluation suite, and interactive browser client dashboard
+
+---
+
+## 🚀 Practical 6 Overview
+- **Objective:** Build an end-to-end full-stack MERN (MongoDB, Express, React, Node.js) web application connecting an interactive React 19 frontend to an Express REST API backend and live MongoDB database.
+- **Key Features:**
+  - 3-Tier Architecture: Presentation (React 19 + Vite on port 5173), Application Logic (Node/Express on port 5000), Data Layer (MongoDB on port 27017)
+  - Full Asynchronous CRUD: Complete Create, Read, Update, Toggle Complete, and Delete operations synchronized across React state and MongoDB documents
+  - Modular React Architecture: `Navbar`, `StatsDashboard`, `TaskFilter`, `TaskList`, `TaskItem`, `TaskForm` modal, and `Toast` notifications
+  - Robust Backend Pipeline: CORS configuration, request logger middleware with latency tracking, Mongoose schema validation with pre-save trimming hooks, and centralized error handling
+  - Advanced HUD & Viva Prep: Real-time network architecture monitor, live HTTP request log stream, Mongoose schema contract viewer, and interactive oral examination viva guide
+  - Automated Verification: Comprehensive 29-test evaluation suite (`test_fullstack.js`) verifying 100% distinction grade pass (20/20 marks)
+
 
 
 

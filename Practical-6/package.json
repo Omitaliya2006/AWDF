@@ -1,0 +1,25 @@
+{
+  "name": "fullstack-task-manager-24it029",
+  "version": "1.0.0",
+  "description": "Practical 6: Full Stack Integration React + Node + MongoDB by Om Italiya (24IT029) - CSPIT CHARUSAT",
+  "private": true,
+  "scripts": {
+    "start:backend": "node backend/server.js",
+    "start:frontend": "npm run dev --prefix frontend",
+    "test": "node test_fullstack.js",
+    "build:frontend": "npm run build --prefix frontend"
+  },
+  "keywords": [
+    "react",
+    "express",
+    "mongodb",
+    "mongoose",
+    "full-stack",
+    "rest-api",
+    "awdf",
+    "cspit",
+    "charusat"
+  ],
+  "author": "Om Italiya (24IT029)",
+  "license": "MIT"
+}
