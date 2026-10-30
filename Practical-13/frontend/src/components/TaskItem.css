@@ -1,0 +1,209 @@
+.task-item-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.task-item-card:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.task-item-card.completed {
+  opacity: 0.75;
+  border-left: 3px solid #10b981;
+}
+
+.task-item-card.in-progress {
+  border-left: 3px solid #6366f1;
+}
+
+.task-item-card.pending {
+  border-left: 3px solid #f59e0b;
+}
+
+.task-top-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.status-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border-focus);
+  background: none;
+  color: #10b981;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.status-circle.checked {
+  background: #10b981;
+  border-color: #10b981;
+  color: white;
+}
+
+.task-heading {
+  flex: 1;
+}
+
+.task-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.task-title.done {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.task-desc-box {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+  margin-top: 0.3rem;
+}
+
+.task-desc-text {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.task-badges {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.badge-ai {
+  font-size: 0.7rem;
+  background: rgba(139, 92, 246, 0.2);
+  color: #c4b5fd;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.badge-priority, .badge-status {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.badge-priority.high { background: rgba(244, 63, 94, 0.2); color: #fb7185; }
+.badge-priority.medium { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+.badge-priority.low { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+
+.badge-status.completed { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+.badge-status.in-progress { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; }
+.badge-status.pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+
+.task-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.task-author code {
+  color: var(--accent-purple);
+}
+
+.task-action-btns {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  padding: 0.2rem;
+  border-radius: 4px;
+  transition: opacity 0.2s;
+}
+
+.icon-btn:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Edit Mode */
+.task-edit-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.edit-input, .edit-textarea {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.5rem;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.edit-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.edit-controls select {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.35rem 0.5rem;
+  color: var(--text-primary);
+  font-size: 0.8rem;
+}
+
+.edit-btn-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.save-btn, .cancel-btn {
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.save-btn {
+  background: var(--accent-purple);
+  color: white;
+  border: none;
+}
+
+.cancel-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}

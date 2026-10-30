@@ -25,6 +25,7 @@
 | **Practical 10** | Asynchronous Processing with Event-Driven Architecture | Node.js, EventEmitter, Express, MongoDB, React 19 | ✅ Completed | [Practical-10](./Practical-10) |
 | **Practical 11** | Containerization with Docker and Docker Compose | Docker, Docker Compose, Multi-Stage, Volumes | ✅ Completed | [Practical-11](./Practical-11) |
 | **Practical 12** | CI/CD Pipeline with GitHub Actions | GitHub Actions, Jest, Supertest, Ubuntu Runner, CI Badge | ✅ Completed | [Practical-12](./Practical-12) |
+| **Practical 13** | AI API Integration into a Web Application | OpenAI, Gemini, Express, Graceful Degradation, Rate Limiting | ✅ Completed | [Practical-13](./Practical-13) |
 
 ---
 
@@ -183,6 +184,24 @@
   - Interactive Pipeline Status HUD: React dashboard with live pass/fail simulation toggles, step-by-step pipeline visualization, and runner console terminal preview.
   - Oral Viva Examination Guide: 6 curated questions and detailed answers covering CI vs CD differences, shift-left testing, fast vs flaky tests, automatic deployment extensions, and GitHub Actions secrets.
   - Automated Verification: Comprehensive 20-test evaluation suite (`test_ci.js`) verifying 100% distinction grade pass (20/20 marks).
+
+---
+
+## 🤖 Practical 13 Overview
+- **Objective:** Securely integrate an external AI service (OpenAI / Gemini API) into the full-stack Task Management application with defensive graceful degradation, in-memory rate limiting, and Responsible AI governance.
+- **Key Features:**
+  - Secure Server-Side AI Mediation: Express route `POST /api/ai/generate-description` calls OpenAI API; API keys strictly stored in backend `.env` (never exposed to browser client or committed to git).
+  - Feature Meaningfulness: Contextually auto-generates structured task descriptions (summary, objectives, criteria), suggests appropriate priority levels, and calculates target due dates.
+  - Fault-Tolerant Graceful Degradation: Defensive try/catch architecture with an intelligent heuristic fallback engine; ensures the application remains 100% operational during third-party API 401 errors, quota exhaustion, or timeouts without crashing.
+  - Live Failure Simulation API: Endpoint `POST /api/ai/simulate-failure` allowing students and faculty to test and verify graceful degradation behavior live.
+  - In-Memory Sliding Window Rate Limiter: Enforces a quota of 10 requests per minute per IP to protect API credits and prevent denial-of-wallet attacks.
+  - Responsible AI Principles:
+    - Human-in-the-Loop: Suggestions populate into an editable form textarea for user review and adjustment before saving.
+    - Prominent Disclaimers: Clear UI banners and "✨ AI-Assisted" task badges inform users of machine-generated content.
+    - Data Minimization: Only task titles are transmitted; zero PII, passwords, or credentials are ever sent.
+  - Interactive AI Status HUD & Viva Guide: Real-time security matrix, live failure simulation trigger, and curated oral viva answers.
+  - Automated Verification: Comprehensive 20-test evaluation suite (`test_ai.js`) verifying 100% distinction grade pass (20/20 marks).
+
 
 
 

@@ -1,0 +1,14 @@
+{
+  "name": "practical-13-root",
+  "version": "1.0.0",
+  "description": "Practical 13: AI API Integration into a Web Application (Om Italiya - 24IT029)",
+  "scripts": {
+    "test": "node test_ai.js",
+    "test:backend": "cd backend && npm test",
+    "test:eval": "node test_ai.js",
+    "build:frontend": "cd frontend && npm run build",
+    "start": "cd backend && node server.js"
+  },
+  "author": "Om Italiya (24IT029)",
+  "license": "MIT"
+}
