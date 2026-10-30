@@ -1,6 +1,12 @@
+/**
+ * Practical 12: CI/CD Pipeline with GitHub Actions
+ * Task Mongoose Model
+ * Author: Om Italiya (24IT029)
+ */
+
 const mongoose = require('mongoose');
 
-const TaskSchema = new mongoose.Schema(
+const taskSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -14,9 +20,13 @@ const TaskSchema = new mongoose.Schema(
       trim: true,
       default: ''
     },
-    completed: {
-      type: Boolean,
-      default: false
+    status: {
+      type: String,
+      enum: {
+        values: ['pending', 'in-progress', 'completed'],
+        message: 'Status must be pending, in-progress, or completed'
+      },
+      default: 'pending'
     },
     priority: {
       type: String,
@@ -26,9 +36,14 @@ const TaskSchema = new mongoose.Schema(
       },
       default: 'medium'
     },
-    environment: {
+    assignedTo: {
       type: String,
-      default: 'Docker Containerized'
+      trim: true,
+      default: 'Om Italiya (24IT029)'
+    },
+    dueDate: {
+      type: Date,
+      default: null
     }
   },
   {
@@ -36,10 +51,4 @@ const TaskSchema = new mongoose.Schema(
   }
 );
 
-TaskSchema.pre('save', function (next) {
-  if (this.title) this.title = this.title.trim();
-  if (this.description) this.description = this.description.trim();
-  next();
-});
-
-module.exports = mongoose.model('Task', TaskSchema);
+module.exports = mongoose.model('Task', taskSchema);

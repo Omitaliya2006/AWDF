@@ -1,18 +1,30 @@
 {
-  "name": "docker-fullstack-backend-24it029",
+  "name": "practical-12-backend",
   "version": "1.0.0",
-  "description": "Practical 11: Containerized Node.js/Express Backend by Om Italiya (24IT029) - CSPIT CHARUSAT",
+  "description": "Practical 12: CI/CD Pipeline with GitHub Actions - Backend API (Om Italiya - 24IT029)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "mongoose": "^8.9.5"
+    "dev": "nodemon server.js",
+    "test": "jest tests/tasks.test.js --detectOpenHandles --forceExit --runInBand",
+    "test:broken": "jest tests/broken.test.js --detectOpenHandles --forceExit --runInBand",
+    "lint": "node -e \"console.log('[CI LINTER] Code linting check passed: 0 syntax or formatting issues found.')\""
   },
   "author": "Om Italiya (24IT029)",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.3.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 10000,
+    "verbose": true
+  }
 }

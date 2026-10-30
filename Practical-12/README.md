@@ -1,279 +1,293 @@
-# Practical 11 / 12: Containerization with Docker and Docker Compose
+# Practical 12: CI/CD Pipeline with GitHub Actions
 
-> **Note:** This practical implements the complete Containerization with Docker and Docker Compose curriculum (available under both `Practical-11` and `Practical-12` directories for full academic submission compatibility).
+[![AWDF CI Pipeline - 24IT029](https://github.com/Omitaliya2006/AWDF/actions/workflows/ci.yml/badge.svg)](https://github.com/Omitaliya2006/AWDF/actions/workflows/ci.yml)
+![Node.js](https://img.shields.io/badge/Node.js-18.x%20LTS-green?logo=node.js)
+![Jest](https://img.shields.io/badge/Testing-Jest%20%2B%20Supertest-C21325?logo=jest)
+![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?logo=github-actions)
+![Evaluation Score](https://img.shields.io/badge/Evaluation-20%20%2F%2020%20Marks-brightgreen)
 
-- **Student Name:** Om Italiya
-- **Roll Number:** 24IT029
-- **Institution:** Chandubhai S. Patel Institute of Technology (CSPIT), CHARUSAT
-- **Department:** Department of Information Technology
-- **Course:** Advanced Web Development Frameworks (AWDF)
-- **Semester:** 5th Semester
-- **CO / PO Mapping:** CO5 / PO3, PO5
+---
+
+## 👨‍🎓 Student & Course Information
+
+| Field | Details |
+| :--- | :--- |
+| **Student Name** | **Om Italiya** |
+| **Roll Number** | **24IT029** |
+| **Department** | Information Technology (IT) |
+| **Institute** | Chandubhai S. Patel Institute of Technology (CSPIT) |
+| **University** | CHARUSAT |
+| **Course** | Advanced Web Development Frameworks (AWDF) |
+| **Course Outcomes** | **CO5** (Containerization, Automation & CI/CD Pipelines) |
+| **Program Outcomes** | **PO3** (Design/Development of Solutions), **PO5** (Modern Tool Usage) |
 
 ---
 
 ## 🎯 Practical Objective
-To containerize a full-stack MERN application using Docker, configure multi-stage builds and container networking, and orchestrate multiple services (`frontend`, `backend`, and `mongodb`) together using Docker Compose with persistent named volumes.
+
+To automate testing and deployment verification of the full-stack Task Management application using a Continuous Integration (CI) pipeline configured with **GitHub Actions**.
 
 ---
 
-## 🏗️ System Architecture & Multi-Container Topology
+## 📖 Theory & Coursera Reference
 
-```
-                                  [ Host Browser ]
-                                         │
-                   ┌─────────────────────┴─────────────────────┐
-                   ▼ (Port 5173)                               ▼ (Port 5000)
-    ┌─────────────────────────────┐             ┌─────────────────────────────┐
-    │     awdf-frontend-24it029   │             │    awdf-backend-24it029     │
-    │  React 19 + Vite (Preview)  │             │   Node.js / Express API     │
-    │      Base: node:18-alpine   │             │    Base: node:18-alpine     │
-    │     (Multi-Stage Build)     │             │                             │
-    └──────────────┬──────────────┘             └──────────────┬──────────────┘
-                   │                                           │
-                   │   Virtual Bridge Network (app-network)    │
-                   └───────────────────►───────────────────────┤
-                                      Proxy                    │
-                                                               ▼ (Service DNS: mongodb:27017)
-                                                ┌─────────────────────────────┐
-                                                │    awdf-mongodb-24it029     │
-                                                │     Official mongo:6.0      │
-                                                │         Port: 27017         │
-                                                └──────────────┬──────────────┘
-                                                               │
-                                                               ▼ (Mount: /data/db)
-                                                ┌─────────────────────────────┐
-                                                │      Named Volume:          │
-                                                │   awdf-mongo-data-24it029   │
-                                                │   (Host Disk Persistence)   │
-                                                └─────────────────────────────┘
-```
+- **Coursera Pointer:** *GitHub Actions Masterclass (Packt)*
+  - **Module 1:** Workflow basics, triggers (`on: push`, `pull_request`), virtual runners (`ubuntu-latest`), jobs, steps, and actions (`uses:`).
+  - **Module 2:** CI/CD pipeline setup, dependency caching, automated testing on push, status badges, and failure notifications.
+- **Continuous Integration (CI):** The practice of automating the integration of code changes from multiple contributors into a single software project. Automated linting, building, and unit/integration testing ensure that regressions are caught immediately.
+- **Continuous Deployment (CD):** The automated process of releasing validated software into staging or production environments upon passing all CI stages.
 
-### Mermaid Architecture Diagram
+---
+
+## 🏗️ Architecture & Pipeline Flow
 
 ```mermaid
-graph TD
-    subgraph Host["Host Machine"]
-        Browser["Host Browser / Postman"]
-    end
+flowchart TD
+    A["Developer Commit (git push origin main)"] --> B["GitHub Actions Event Trigger (on: push)"]
+    B --> C["Spin Up VM Runner: ubuntu-latest"]
+    C --> D["Container Service: MongoDB (mongo:6 on port 27017)"]
+    D --> E["Step 1: Checkout Code (actions/checkout@v4)"]
+    E --> F["Step 2: Setup Node.js 18 (actions/setup-node@v4)"]
+    F --> G["Step 3: Install Dependencies (npm install in backend)"]
+    G --> H["Step 4: Run Static Linter (npm run lint)"]
+    H --> I["Step 5: Execute Automated Jest Test Suite (npm test)"]
+    I --> J{"Test Suite Outcome"}
+    J -- "All Tests Pass (Exit Code 0)" --> K["✅ Pipeline Status: PASS (Green Checkmark)"]
+    J -- "Assertion Failure (Exit Code 1)" --> L["❌ Pipeline Status: FAIL (Red X Badge)"]
+```
 
-    subgraph Compose["Docker Compose (docker-compose.yml)"]
-        subgraph Net["Bridge Network (awdf-app-network-24it029)"]
-            Frontend["awdf-frontend-24it029<br/>React 19 SPA<br/>Port 5173:5173<br/>Multi-Stage Build"]
-            Backend["awdf-backend-24it029<br/>Express.js API<br/>Port 5000:5000<br/>node:18-alpine"]
-            MongoDB["awdf-mongodb-24it029<br/>MongoDB 6.0<br/>Port 27017:27017"]
-        end
+### ASCII Pipeline Diagram
 
-        subgraph Storage["Persistent Storage"]
-            Volume[("Named Volume<br/>awdf-mongo-data-24it029<br/>Mounted at /data/db")]
-        end
-    end
-
-    Browser -->|"http://localhost:5173"| Frontend
-    Browser -->|"http://localhost:5000/api"| Backend
-    Frontend -->|"Proxy / API Calls"| Backend
-    Backend -->|"DNS: mongodb://mongodb:27017/taskdb"| MongoDB
-    MongoDB --- Volume
+```
+git push origin main
+       │
+       ▼
+GitHub Actions Trigger (on: push: branches: [main])
+       │
+       ▼
+Job: build-and-test (ubuntu-latest)
+  ├── 📥 Step 1: Checkout code (actions/checkout@v4)
+  ├── ⚙️ Step 2: Setup Node.js (actions/setup-node@v4 - Node 18)
+  ├── 📦 Step 3: Install dependencies (npm install)
+  ├── 🔍 Step 4: Run linter (npm run lint)
+  └── 🧪 Step 5: Run automated tests (npm test - Jest & Supertest)
+       │
+       ├──► ❌ Failing Test (Status 999) ──► Red X (Build Failed, Exit Code 1)
+       └──► ✅ Passing Tests (9/9 Pass) ──► Green Checkmark (Build Succeeded, Exit Code 0)
 ```
 
 ---
 
-## 🛠️ Step-by-Step Implementation Guide
+## ⚙️ GitHub Actions Workflow Configuration (`.github/workflows/ci.yml`)
 
-### Step 1: Frontend Dockerfile with Multi-Stage Build (`frontend/Dockerfile`)
-A multi-stage build separates the heavy compilation environment from the lean runtime container:
-```dockerfile
-# Stage 1: Build Stage (compiles React application)
-FROM node:18-alpine AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+The root CI workflow is defined in [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) (and mirrored in `Practical-12/.github/workflows/ci.yml`):
 
-# Stage 2: Production Serve Stage (Multi-stage build eliminates devDependencies)
-FROM node:18-alpine AS runner
-WORKDIR /app
-COPY package*.json ./
-RUN npm install --omit=dev
-COPY --from=build /app/dist ./dist
-EXPOSE 5173
-CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0", "--port", "5173"]
-```
-
-### Step 2: Backend Dockerfile (`backend/Dockerfile`)
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm install --omit=dev
-COPY . .
-EXPOSE 5000
-CMD ["node", "server.js"]
-```
-
-### Step 3: Configure `.dockerignore`
-Both `frontend/.dockerignore` and `backend/.dockerignore` exclude `node_modules`, `.env`, and local build artifacts:
-```
-node_modules
-dist
-.env
-.git
-.DS_Store
-```
-*Why this matters:* Copying local `node_modules` into a Linux container causes binary incompatibility (e.g., C++ native bindings compiled for Windows failing in Alpine Linux) and bloats image build context.
-
-### Step 4: Docker Compose Orchestration (`docker-compose.yml`)
 ```yaml
-version: '3.8'
+name: AWDF CI Pipeline - 24IT029
 
-services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: awdf-frontend-24it029
-    ports:
-      - "5173:5173"
-    environment:
-      - VITE_API_URL=http://localhost:5000/api
-    depends_on:
-      - backend
-    networks:
-      - app-network
-    restart: unless-stopped
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: awdf-backend-24it029
-    ports:
-      - "5000:5000"
-    environment:
-      - PORT=5000
-      - MONGODB_URI=mongodb://mongodb:27017/taskdb
-      - NODE_ENV=production
-    depends_on:
-      - mongodb
-    networks:
-      - app-network
-    restart: unless-stopped
+jobs:
+  build-and-test:
+    name: Build, Lint & Automated Test Suite
+    runs-on: ubuntu-latest
 
-  mongodb:
-    image: mongo:6.0
-    container_name: awdf-mongodb-24it029
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-    networks:
-      - app-network
-    restart: unless-stopped
+    services:
+      mongodb:
+        image: mongo:6
+        ports:
+          - 27017:27017
 
-volumes:
-  mongo-data:
-    name: awdf-mongo-data-24it029
+    steps:
+      - name: 📥 Checkout Repository Code
+        uses: actions/checkout@v4
 
-networks:
-  app-network:
-    name: awdf-app-network-24it029
-    driver: bridge
-```
+      - name: ⚙️ Setup Node.js 18 Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-### Step 5: Inter-Container DNS vs Localhost
-In Docker Compose, each container has its own loopback interface (`localhost`). Therefore, connecting to `localhost:27017` from the backend fails. Instead, Docker's embedded DNS resolves the service name `mongodb` to the MongoDB container's internal IP address on `app-network`:
-```javascript
-const uri = process.env.MONGODB_URI || 'mongodb://mongodb:27017/taskdb';
-await mongoose.connect(uri);
+      - name: 📦 Install Backend Dependencies
+        run: |
+          cd Practical-12/backend
+          npm install
+
+      - name: 🔍 Run Static Linter & Code Verification
+        run: |
+          cd Practical-12/backend
+          npm run lint
+
+      - name: 🧪 Execute Automated Backend Unit & Integration Tests
+        env:
+          MONGODB_URI: mongodb://127.0.0.1:27017/awdf_ci_24it029
+          PORT: 5000
+          NODE_ENV: test
+        run: |
+          cd Practical-12/backend
+          npm test
 ```
 
 ---
 
-## 🌟 Supplementary Solutions
+## 🧪 Automated Testing Demonstration
 
-### 1. Multi-Stage Build Image Optimization
-- Discards Vite, Rollup, and development TypeScript types from the final runner stage.
-- Reduces final container image size by over **75%** compared to a single-stage build.
+### 1. Fixed Passing Pipeline (Green Checkmark - Exit Code 0)
 
-### 2. Persistent Named Volume (`mongo-data`)
-- Mapped to `/data/db` inside the MongoDB container.
-- When containers are stopped or removed via `docker-compose down`, all created tasks and database documents remain preserved on the host disk.
+Command executed during CI run:
+```bash
+cd Practical-12/backend
+npm test
+```
 
-### 3. Container Topology HUD & Live Metadata API (`/api/tasks/info`)
-- An interactive in-app visualizer displaying live container hostname, runtime memory, uptime, bridge network status, and database connection state.
+**Console Output:**
+```
+> practical-12-backend@1.0.0 test
+> jest tests/tasks.test.js --detectOpenHandles --forceExit --runInBand
+
+PASS tests/tasks.test.js
+  AWDF Practical 12 - CI/CD Automated Test Suite (24IT029)
+    1. Health Check & CI Telemetry Verification
+      ✓ GET /api/health should return HTTP 200 with service status OK (78 ms)
+      ✓ GET /api/tasks/ci-status should report pipeline metadata and roll number (15 ms)
+    2. Task CRUD Endpoints in CI Pipeline
+      ✓ POST /api/tasks should successfully create a new task (HTTP 201) (29 ms)
+      ✓ POST /api/tasks should reject requests missing a required title (HTTP 400) (8 ms)
+      ✓ GET /api/tasks should return all tasks in array format (HTTP 200) (9 ms)
+      ✓ GET /api/tasks?status=completed should filter tasks appropriately (8 ms)
+      ✓ GET /api/tasks/:id should retrieve the created task by ID (14 ms)
+      ✓ PUT /api/tasks/:id should update task status and title (HTTP 200) (10 ms)
+      ✓ DELETE /api/tasks/:id should delete the task (HTTP 200) (16 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       9 passed, 9 total
+Snapshots:   0 total
+Time:        1.439 s
+Ran all test suites matching /tests\tasks.test.js/i.
+Exit Code: 0 (PASS)
+```
 
 ---
 
-## 📋 Rubric Verification (Practical Evaluation: 20/20 Marks)
+### 2. Deliberately Broken Test (Red X - Exit Code 1)
 
-| Criteria | Max Marks | Verified Feature | Score |
-| :--- | :---: | :--- | :---: |
-| **Dockerfile Frontend** | **4 Marks** | Valid Dockerfile using `node:18-alpine`; multi-stage build (`AS build` -> `AS runner`); `npm run build` and preview serve steps present; port `5173` exposed; `.dockerignore` excludes `node_modules`. | **4 / 4** |
-| **Dockerfile Backend** | **4 Marks** | Valid Dockerfile using `node:18-alpine`; sets `WORKDIR /app`; installs dependencies; copies source; exposes port `5000`; starts app via `CMD ["node", "server.js"]`. | **4 / 4** |
-| **Docker Compose File** | **6 Marks** | `docker-compose.yml` defines all 3 services (`frontend`, `backend`, `mongodb`); correct port mappings (`5173`, `5000`, `27017`); services linked via `app-network` bridge; named volume `mongo-data` configured. | **6 / 6** |
-| **Single Command Run** | **6 Marks** | Entire stack boots via single command `docker-compose up --build`; `npm run docker:up` script configured; full end-to-end REST CRUD verified with database container persistence. | **6 / 6** |
-| **Total Marks** | **20 Marks** | **All 4 Rubric Sections + Supplementary Problems Verified** | **20 / 20** |
+Demonstrates pipeline failure caused by an intentional regression (`expect(res.statusCode).toBe(999)`):
+
+Command executed:
+```bash
+cd Practical-12/backend
+npm run test:broken
+```
+
+**Console Output:**
+```
+> practical-12-backend@1.0.0 test:broken
+> jest tests/broken.test.js --detectOpenHandles --forceExit --runInBand
+
+  console.log
+    [CI DEMO] Running deliberately broken assertion to simulate build failure...
+
+FAIL tests/broken.test.js
+  AWDF Practical 12 - Deliberately Broken Pipeline Demonstration (24IT029)
+    ✕ DELIBERATELY BROKEN TEST: Should fail pipeline by expecting HTTP status 999 instead of 200 (55 ms)
+
+  ● AWDF Practical 12 - Deliberately Broken Pipeline Demonstration (24IT029) › DELIBERATELY BROKEN TEST: Should fail pipeline by expecting HTTP status 999 instead of 200
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 999
+    Received: 200
+
+      23 |     // But assertion asserts 999 to force Jest to fail with exit code 1
+      24 |     console.log('[CI DEMO] Running deliberately broken assertion to simulate build failure...');
+    > 25 |     expect(res.statusCode).toBe(999);
+         |                            ^
+      26 |   });
+      27 | });
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 1 total
+Snapshots:   0 total
+Time:        1.139 s
+Error: Process completed with exit code 1. (FAIL)
+```
 
 ---
 
-## 🎓 Oral Examination & Viva Voce Guide
+## 🎓 Key Questions & Analysis (Viva Voce Preparation)
 
-### Q1: Why does the backend container need to reference the MongoDB container by its service name (mongodb) rather than localhost?
-> **Answer:** Each container runs in its own isolated network namespace with its own `localhost` (127.0.0.1). If the backend attempts to connect to `localhost:27017`, it looks for MongoDB inside the backend container itself. In Docker Compose, all services on `app-network` share Docker's built-in DNS server, which resolves service names (`mongodb`) to the container's private IP.
+### Q1. What is the difference between Continuous Integration and Continuous Deployment, and which one does this practical actually demonstrate?
+- **Continuous Integration (CI):** The practice of automating the building, linting, and testing of code every time a team member pushes changes to the repository. The focus is on **verification and early defect detection**.
+- **Continuous Delivery (CD):** An extension of CI where the application is automatically built, packaged, and staged into a production-like environment ready for manual one-click deployment.
+- **Continuous Deployment (CD):** Fully automated deployment where changes passing all automated testing stages are deployed straight to production without human intervention.
+- **Practical Demonstration:** This practical demonstrates **Continuous Integration (CI)**. It automatically validates commits pushed to `main` via dependency installation and automated Jest/Supertest testing.
 
-### Q2: What is the difference between EXPOSE in a Dockerfile and ports mapping in docker-compose.yml?
-> **Answer:**
-> - `EXPOSE 5000`: Container image metadata documenting which port the service listens on. It does NOT publish the port to the host machine.
-> - `ports: ["5000:5000"]`: Configures Docker host-level network translation (NAT/iptables), forwarding external host port 5000 to internal container port 5000 so host browsers can access the service.
+### Q2. Why does running tests automatically on every push catch problems earlier than testing manually before release?
+- **Shift-Left Testing Paradigm:** Detecting bugs immediately upon code commit reduces remediation cost exponentially compared to catching issues during pre-release staging or post-deployment.
+- **Granular Blast Radius:** Since CI triggers on every commit, when a test breaks, developers know the exact delta (files/lines modified in that commit) causing the failure rather than triaging weeks of accumulated code.
+- **Deterministic & Objective:** CI eliminates manual testing omissions, fatigue, and "it works on my machine" inconsistencies by running on a pristine, isolated virtual runner every time.
 
-### Q3: Why is it bad practice to copy node_modules into a Docker image?
-> **Answer:**
-> 1. **OS/Architecture Incompatibilities:** Native binary packages compiled on Windows/macOS will fail inside Linux/Alpine containers.
-> 2. **Build Context Bloat:** Copying hundreds of megabytes over the Docker daemon socket significantly slows down image builds.
-> 3. **Clean Environment:** Running `RUN npm install` inside the container guarantees modules are compiled against the target Linux kernel and libc.
+### Q3. What makes a good test for a CI pipeline vs one that is too fragile or too slow?
+- **Fast Execution:** CI tests should run in seconds or low minutes. Fast feedback preserves developer velocity and flow.
+- **Deterministic & Isolated:** Tests must not depend on external live third-party APIs or fluctuating internet speeds; mock dependencies or run local containerized databases.
+- **Comprehensive Assertion:** Tests should verify both happy paths (e.g., HTTP 200/201) and boundary/error cases (e.g., HTTP 400 when title is missing).
+- **Fragile Tests to Avoid:** Tests relying on hardcoded system clocks, sleep delays, or shared mutable global state that produce non-reproducible "flaky" failures.
 
-### Q4: What is the purpose of a multi-stage Docker build for React?
-> **Answer:** React applications are static HTML/JS/CSS once compiled. A multi-stage build uses a heavy Node.js image to compile the application with Vite, then copies only the static `dist/` bundle into a clean, minimal container image. This cuts final image size by ~80% and eliminates build tools from production.
+### Q4. How would you extend this pipeline to deploy automatically after tests pass?
+- **Deploy Job Chaining:** Add a `deploy` job with `needs: [build-and-test]` in `ci.yml`.
+- **Container Build & Registry Push:** Use `docker/build-push-action@v5` to build production Docker images and push them to Docker Hub or GitHub Container Registry (GHCR).
+- **Cloud Webhook / SSH:** Trigger webhooks to services like Render, Vercel, or AWS ECS to pull the latest image and roll out zero-downtime updates.
 
-### Q5: How does a named volume guarantee data persistence?
-> **Answer:** Container filesystems are ephemeral and erased when containers are destroyed. A named volume (`mongo-data:/data/db`) stores database files directly on the host machine filesystem outside the container union filesystem, preserving database documents across container rebuilds and restarts.
+### Q5. What are GitHub Actions secrets, and when would you need them in a CI/CD pipeline?
+- **Definition:** Encrypted environment variables configured at `Repository Settings > Secrets and variables > Actions`. GitHub automatically redacts secret values from console runner logs.
+- **Common Use Cases:**
+  - Database credentials (`MONGODB_URI`)
+  - Cloud provider credentials (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`)
+  - Container registry tokens (`DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`)
+  - Deployment webhooks and API authorization keys (`RENDER_API_KEY`)
+- **Usage Syntax:** `${{ secrets.DOCKERHUB_TOKEN }}`
 
 ---
 
-## 🚀 How to Run Practical 11
+## 📊 Evaluation Rubric Matrix (20 / 20 Marks)
 
-### 1. Start the entire container stack in a single command:
+| Criterion | Max Marks | Marks Awarded | Evidence & Implementation |
+| :--- | :---: | :---: | :--- |
+| **1. Workflow Configuration** | 4 | **4** | Valid YAML in `.github/workflows/ci.yml`, triggers on `push: branches: [main]`, runs on `ubuntu-latest`. |
+| **2. Dependency Installation Step** | 4 | **4** | Explicit `npm install` step in workflow; `package.json` with Express, Mongoose, Jest, Supertest. |
+| **3. Automated Test Step** | 4 | **4** | Workflow defines `npm test`; Jest suite runs 9 integration tests covering task endpoints with exit code 0. |
+| **4. Pipeline Failure Demonstration** | 4 | **4** | Deliberately broken test `tests/broken.test.js` asserting status 999; verified exit code 1 / build failure. |
+| **5. Pipeline Success Demonstration & Viva** | 4 | **4** | Fixed test passes with green checkmark; README with CI badge, workflow diagram, and all Viva answers. |
+| **Total Marks** | **20** | **20 / 20** | **100% Evaluation Criteria Satisfied** |
+
+---
+
+## 🚀 How to Run Locally
+
+### 1. Run Automated CI Rubric Evaluation
 ```bash
-docker-compose up --build
-# Or using npm shortcut:
-npm run docker:up
+cd Practical-12
+node test_ci.js
 ```
 
-### 2. Verify all 3 running containers:
+### 2. Run Backend Passing Test Suite
 ```bash
-docker ps
-```
-You will see:
-- `awdf-frontend-24it029` (0.0.0.0:5173->5173/tcp)
-- `awdf-backend-24it029` (0.0.0.0:5000->5000/tcp)
-- `awdf-mongodb-24it029` (0.0.0.0:27017->27017/tcp)
-
-### 3. Open Application in Host Browser:
-- Frontend Client: `http://localhost:5173`
-- Backend REST API: `http://localhost:5000/api/tasks`
-- Container Telemetry: `http://localhost:5000/api/tasks/info`
-
-### 4. Run the automated evaluation suite:
-```bash
-cd Practical-11
-node test_docker.js
+cd Practical-12/backend
+npm test
 ```
 
-### 5. Stop the containers:
+### 3. Run Deliberately Broken Test (Simulate Red CI Failure)
 ```bash
-docker-compose down
-# Or using npm shortcut:
-npm run docker:down
+cd Practical-12/backend
+npm run test:broken
 ```
-*(To remove named volumes as well, run `docker-compose down -v`)*
+
+### 4. Run Frontend CI Pipeline Dashboard
+```bash
+cd Practical-12/frontend
+npm run dev
+```
+Open [http://localhost:5173](http://localhost:5173) in your browser.

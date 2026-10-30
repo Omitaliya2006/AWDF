@@ -23,7 +23,8 @@
 | **Practical 8** | Performance Optimization and Lazy Loading in React | React 19, Vite, React.lazy, Suspense | ✅ Completed | [Practical-8](./Practical-8) |
 | **Practical 9** | In-Memory Caching and Query Optimization | Node.js, Express, node-cache, MongoDB, React 19 | ✅ Completed | [Practical-9](./Practical-9) |
 | **Practical 10** | Asynchronous Processing with Event-Driven Architecture | Node.js, EventEmitter, Express, MongoDB, React 19 | ✅ Completed | [Practical-10](./Practical-10) |
-| **Practical 11 / 12** | Containerization with Docker and Docker Compose | Docker, Docker Compose, Multi-Stage, Volumes | ✅ Completed | [Practical-11](./Practical-11) / [Practical-12](./Practical-12) |
+| **Practical 11** | Containerization with Docker and Docker Compose | Docker, Docker Compose, Multi-Stage, Volumes | ✅ Completed | [Practical-11](./Practical-11) |
+| **Practical 12** | CI/CD Pipeline with GitHub Actions | GitHub Actions, Jest, Supertest, Ubuntu Runner, CI Badge | ✅ Completed | [Practical-12](./Practical-12) |
 
 ---
 
@@ -151,7 +152,7 @@
 
 ---
 
-## 🐳 Practical 11 / 12 Overview
+## 🐳 Practical 11 Overview
 - **Objective:** Containerize the full-stack MERN application using Docker and orchestrate multiple isolated services (`frontend`, `backend`, `mongodb`) using Docker Compose with internal bridge networking and persistent named volumes.
 - **Key Features:**
   - Multi-Stage Frontend Dockerfile: Compiles React 19 SPA in `node:18-alpine` build stage, discards devDependencies, and serves static `dist/` bundle on port `5173`.
@@ -162,6 +163,27 @@
   - Interactive Container Topology HUD: Live visualizer of the 3-tier container architecture, bridge network status, and container telemetry API (`/api/tasks/info`).
   - Oral Viva Examination Guide: 6 curated questions and detailed answers covering multi-stage builds, EXPOSE vs ports, localhost vs service name DNS, and volume persistence.
   - Automated Verification: Comprehensive 40-test evaluation suite (`test_docker.js`) verifying 100% distinction grade pass (20/20 marks).
+
+---
+
+## 🚀 Practical 12 Overview
+- **Objective:** Automate testing and deployment verification of the full-stack Task Management application using a Continuous Integration (CI) pipeline configured with GitHub Actions.
+- **Key Features:**
+  - GitHub Actions Workflow (`.github/workflows/ci.yml`): Automated workflow triggered on every `git push origin main` and `pull_request` to `main`.
+  - Ubuntu Virtual Runner: Executes jobs on GitHub-hosted `ubuntu-latest` with automated sidecar MongoDB container service (`mongo:6` on port `27017`).
+  - Multi-Step Pipeline Architecture:
+    1. Checkout repository code (`actions/checkout@v4`)
+    2. Setup Node.js 18.x runtime environment (`actions/setup-node@v4`)
+    3. Install backend dependencies (`npm install`)
+    4. Execute static code linter (`npm run lint`)
+    5. Execute automated test suite (`npm test`)
+    6. Emit build pass/fail status badge
+  - Automated Jest & Supertest Suite (`tests/tasks.test.js`): Comprehensive 9-test suite verifying health check, CI telemetry, and task CRUD endpoints with status codes 200, 201, 400.
+  - Deliberately Broken Test Demonstration (`tests/broken.test.js`): Intentionally asserts status code 999 to simulate build failure (exit code 1) and red CI status.
+  - Interactive Pipeline Status HUD: React dashboard with live pass/fail simulation toggles, step-by-step pipeline visualization, and runner console terminal preview.
+  - Oral Viva Examination Guide: 6 curated questions and detailed answers covering CI vs CD differences, shift-left testing, fast vs flaky tests, automatic deployment extensions, and GitHub Actions secrets.
+  - Automated Verification: Comprehensive 20-test evaluation suite (`test_ci.js`) verifying 100% distinction grade pass (20/20 marks).
+
 
 
 

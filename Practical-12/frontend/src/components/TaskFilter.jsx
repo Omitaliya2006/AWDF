@@ -1,74 +1,50 @@
 import React from 'react';
 import './TaskFilter.css';
 
-export default function TaskFilter({
-  searchQuery,
-  onSearchChange,
-  selectedPriority,
-  onPriorityChange,
-  statusFilter,
-  onStatusChange,
-  onRefreshTasks,
-  onOpenCreateModal,
-  isLoading
-}) {
+const TaskFilter = ({ filters, onFilterChange }) => {
   return (
     <div className="task-filter-bar">
-      <div className="filter-search-group">
+      <div className="search-box">
         <span className="search-icon">🔍</span>
         <input
           type="text"
-          placeholder="Filter containerized tasks by title or description..."
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="search-input"
+          placeholder="Search task title or description..."
+          value={filters.search}
+          onChange={(e) => onFilterChange({ ...filters, search: e.target.value })}
         />
-        {searchQuery && (
-          <button className="clear-search" onClick={() => onSearchChange('')}>
+        {filters.search && (
+          <button
+            className="clear-search"
+            onClick={() => onFilterChange({ ...filters, search: '' })}
+          >
             ✕
           </button>
         )}
       </div>
 
-      <div className="filter-dropdowns">
+      <div className="filter-selects">
         <select
-          value={selectedPriority}
-          onChange={(e) => onPriorityChange(e.target.value)}
-          className="filter-select"
-        >
-          <option value="all">All Priorities</option>
-          <option value="high">High Priority</option>
-          <option value="medium">Medium Priority</option>
-          <option value="low">Low Priority</option>
-        </select>
-
-        <select
-          value={statusFilter}
-          onChange={(e) => onStatusChange(e.target.value)}
-          className="filter-select"
+          value={filters.status}
+          onChange={(e) => onFilterChange({ ...filters, status: e.target.value })}
         >
           <option value="all">All Statuses</option>
-          <option value="active">Active Only</option>
-          <option value="completed">Completed Only</option>
+          <option value="pending">Pending</option>
+          <option value="in-progress">In-Progress</option>
+          <option value="completed">Completed</option>
         </select>
 
-        <button
-          className="btn-refresh"
-          onClick={onRefreshTasks}
-          disabled={isLoading}
-          title="Refresh tasks from MongoDB container"
+        <select
+          value={filters.priority}
+          onChange={(e) => onFilterChange({ ...filters, priority: e.target.value })}
         >
-          🔄 {isLoading ? 'Fetching...' : 'Fetch Tasks'}
-        </button>
-
-        <button
-          className="btn-create"
-          onClick={onOpenCreateModal}
-          title="Create a new task and persist to named volume"
-        >
-          ➕ Add Container Task
-        </button>
+          <option value="all">All Priorities</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
       </div>
     </div>
   );
-}
+};
+
+export default TaskFilter;

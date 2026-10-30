@@ -1,60 +1,115 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './TaskItem.css';
 
-export default function TaskItem({
-  task,
-  onToggleComplete,
-  onEditTask,
-  onDeleteTask
-}) {
+const TaskItem = ({ task, onUpdate, onDelete, onToast }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(task.title);
+  const [editStatus, setEditStatus] = useState(task.status);
+  const [editPriority, setEditPriority] = useState(task.priority);
+
+  const handleSave = async () => {
+    if (!editTitle.trim()) {
+      onToast('Title cannot be empty', 'error');
+      return;
+    }
+    try {
+      await onUpdate(task._id, {
+        title: editTitle,
+        status: editStatus,
+        priority: editPriority
+      });
+      setIsEditing(false);
+      onToast('Task updated successfully', 'success');
+    } catch (err) {
+      onToast(err.message, 'error');
+    }
+  };
+
+  const handleToggleStatus = async () => {
+    const nextStatus = task.status === 'completed' ? 'pending' : 'completed';
+    try {
+      await onUpdate(task._id, { status: nextStatus });
+      onToast(`Task marked as ${nextStatus}`, 'success');
+    } catch (err) {
+      onToast(err.message, 'error');
+    }
+  };
+
   return (
-    <div className={`task-card ${task.completed ? 'completed' : ''} priority-${task.priority}`}>
-      <div className="task-header">
-        <label className="checkbox-container">
+    <div className={`task-item-card ${task.status}`}>
+      {isEditing ? (
+        <div className="task-edit-mode">
           <input
-            type="checkbox"
-            checked={task.completed}
-            onChange={() => onToggleComplete(task)}
+            type="text"
+            className="edit-title-input"
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
           />
-          <span className="checkmark"></span>
-        </label>
-
-        <div className="task-title-group">
-          <h4 className={`task-title ${task.completed ? 'strike' : ''}`}>{task.title}</h4>
-          <span className={`priority-tag ${task.priority}`}>{task.priority}</span>
+          <div className="edit-selects">
+            <select value={editStatus} onChange={(e) => setEditStatus(e.target.value)}>
+              <option value="pending">Pending</option>
+              <option value="in-progress">In-Progress</option>
+              <option value="completed">Completed</option>
+            </select>
+            <select value={editPriority} onChange={(e) => setEditPriority(e.target.value)}>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div className="edit-btn-group">
+            <button className="save-btn" onClick={handleSave}>Save</button>
+            <button className="cancel-btn" onClick={() => setIsEditing(false)}>Cancel</button>
+          </div>
         </div>
-      </div>
+      ) : (
+        <>
+          <div className="task-item-top">
+            <button
+              className={`checkbox-circle ${task.status === 'completed' ? 'checked' : ''}`}
+              onClick={handleToggleStatus}
+              title="Toggle task completion"
+            >
+              {task.status === 'completed' && '✓'}
+            </button>
 
-      {task.description && (
-        <p className="task-desc">{task.description}</p>
+            <div className="task-title-group">
+              <h4 className={`task-title ${task.status === 'completed' ? 'strikethrough' : ''}`}>
+                {task.title}
+              </h4>
+              {task.description && (
+                <p className="task-desc">{task.description}</p>
+              )}
+            </div>
+
+            <div className="task-badges">
+              <span className={`priority-tag ${task.priority}`}>
+                {task.priority}
+              </span>
+              <span className={`status-tag ${task.status}`}>
+                {task.status}
+              </span>
+            </div>
+          </div>
+
+          <div className="task-item-bottom">
+            <span className="task-meta">
+              👤 <code>{task.assignedTo || 'Om Italiya (24IT029)'}</code>
+            </span>
+
+            <div className="task-actions">
+              <button className="icon-btn edit" onClick={() => setIsEditing(true)} title="Edit Task">
+                ✏️
+              </button>
+              <button className="icon-btn delete" onClick={() => onDelete(task._id)} title="Delete Task">
+                🗑️
+              </button>
+            </div>
+          </div>
+        </>
       )}
-
-      {/* Container Volume Badge */}
-      <div className="task-volume-strip">
-        <span className="volume-label">
-          💾 Persisted in: <code>awdf-mongo-data-24it029</code>
-        </span>
-        <span className="env-badge">Docker Container</span>
-      </div>
-
-      <div className="task-footer">
-        <span className="task-date">
-          {task.createdAt ? new Date(task.createdAt).toLocaleString() : 'Just now'}
-        </span>
-
-        <div className="task-actions">
-          <button className="btn-action edit" onClick={() => onEditTask(task)} title="Edit task in container">
-            ✏️
-          </button>
-          <button
-            className="btn-action delete"
-            onClick={() => onDeleteTask(task._id, task.title)}
-            title="Delete task from persistent volume"
-          >
-            🗑️
-          </button>
-        </div>
-      </div>
     </div>
   );
-}
+};
+
+export default TaskItem;

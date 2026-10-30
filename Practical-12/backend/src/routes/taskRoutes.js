@@ -1,15 +1,31 @@
+/**
+ * Practical 12: CI/CD Pipeline with GitHub Actions
+ * Task API Routes
+ * Author: Om Italiya (24IT029)
+ */
+
 const express = require('express');
 const router = express.Router();
-const taskController = require('../controllers/taskController');
+const {
+  getTasks,
+  getTaskById,
+  createTask,
+  updateTask,
+  deleteTask,
+  getCiTelemetry
+} = require('../controllers/taskController');
 
-// Container Telemetry Endpoint
-router.get('/info', taskController.getContainerInfo);
+// CI pipeline telemetry endpoint
+router.get('/ci-status', getCiTelemetry);
 
-// Task CRUD
-router.get('/', taskController.getAllTasks);
-router.get('/:id', taskController.getTaskById);
-router.post('/', taskController.createTask);
-router.put('/:id', taskController.updateTask);
-router.delete('/:id', taskController.deleteTask);
+// CRUD routes
+router.route('/')
+  .get(getTasks)
+  .post(createTask);
+
+router.route('/:id')
+  .get(getTaskById)
+  .put(updateTask)
+  .delete(deleteTask);
 
 module.exports = router;

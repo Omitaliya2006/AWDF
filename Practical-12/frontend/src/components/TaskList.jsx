@@ -1,44 +1,40 @@
 import React from 'react';
-import './TaskList.css';
 import TaskItem from './TaskItem';
+import './TaskList.css';
 
-export default function TaskList({
-  tasks,
-  onToggleComplete,
-  onEditTask,
-  onDeleteTask,
-  isLoading
-}) {
-  if (isLoading && tasks.length === 0) {
+const TaskList = ({ tasks, loading, onUpdate, onDelete, onToast }) => {
+  if (loading) {
     return (
       <div className="task-list-loading">
-        <div className="loading-spinner"></div>
-        <p>Connecting to backend container service on port 5000...</p>
+        <div className="spinner"></div>
+        <p>Synchronizing tasks with CI-tested API...</p>
       </div>
     );
   }
 
-  if (tasks.length === 0) {
+  if (!tasks || tasks.length === 0) {
     return (
       <div className="task-list-empty">
-        <div className="empty-icon">🐳</div>
-        <h3>No tasks in container volume</h3>
-        <p>Create a task to write documents to the MongoDB container and observe named volume persistence!</p>
+        <span className="empty-icon">📋</span>
+        <p>No tasks found matching filter criteria.</p>
+        <span className="empty-hint">Create a new task to verify API persistence.</span>
       </div>
     );
   }
 
   return (
-    <div className="task-cards-grid">
+    <div className="task-list-container">
       {tasks.map((task) => (
         <TaskItem
           key={task._id}
           task={task}
-          onToggleComplete={onToggleComplete}
-          onEditTask={onEditTask}
-          onDeleteTask={onDeleteTask}
+          onUpdate={onUpdate}
+          onDelete={onDelete}
+          onToast={onToast}
         />
       ))}
     </div>
   );
-}
+};
+
+export default TaskList;

@@ -1,19 +1,20 @@
 import React from 'react';
 import './Toast.css';
 
-export default function Toast({ message, type, onClose }) {
+const Toast = ({ message, type = 'info', onClose }) => {
   if (!message) return null;
 
   return (
-    <div className={`toast-container ${type || 'info'}`}>
+    <div className={`toast-notification ${type}`}>
       <span className="toast-icon">
-        {type === 'success' && '✅'}
-        {type === 'error' && '❌'}
-        {type === 'warning' && '⚠️'}
-        {type === 'info' && '🐳'}
+        {type === 'success' && '✓'}
+        {type === 'error' && '✕'}
+        {type === 'info' && 'ℹ'}
       </span>
-      <span className="toast-msg">{message}</span>
-      <button className="toast-close" onClick={onClose}>✕</button>
+      <span className="toast-message">{message}</span>
+      <button className="toast-close" onClick={onClose}>×</button>
     </div>
   );
-}
+};
+
+export default Toast;

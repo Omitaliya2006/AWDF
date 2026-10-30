@@ -1,0 +1,46 @@
+name: AWDF CI Pipeline - 24IT029
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    name: Build, Lint & Automated Test Suite
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:6
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: 📥 Checkout Repository Code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js 18 Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: 📦 Install Backend Dependencies
+        run: |
+          cd Practical-12/backend
+          npm install
+
+      - name: 🔍 Run Static Linter & Code Verification
+        run: |
+          cd Practical-12/backend
+          npm run lint
+
+      - name: 🧪 Execute Automated Backend Unit & Integration Tests
+        env:
+          MONGODB_URI: mongodb://127.0.0.1:27017/awdf_ci_24it029
+          PORT: 5000
+          NODE_ENV: test
+        run: |
+          cd Practical-12/backend
+          npm test
