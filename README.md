@@ -23,6 +23,7 @@
 | **Practical 8** | Performance Optimization and Lazy Loading in React | React 19, Vite, React.lazy, Suspense | ✅ Completed | [Practical-8](./Practical-8) |
 | **Practical 9** | In-Memory Caching and Query Optimization | Node.js, Express, node-cache, MongoDB, React 19 | ✅ Completed | [Practical-9](./Practical-9) |
 | **Practical 10** | Asynchronous Processing with Event-Driven Architecture | Node.js, EventEmitter, Express, MongoDB, React 19 | ✅ Completed | [Practical-10](./Practical-10) |
+| **Practical 11 / 12** | Containerization with Docker and Docker Compose | Docker, Docker Compose, Multi-Stage, Volumes | ✅ Completed | [Practical-11](./Practical-11) / [Practical-12](./Practical-12) |
 
 ---
 
@@ -147,6 +148,21 @@
     - Live Event Monitor HUD: Visual timeline showing real-time non-blocking time delta ($+606\text{ms}$ gap) and background event stream.
     - Oral Viva Examination Guide: 6 curated questions and detailed answers covering event loop phases, single-process limits, and decoupling benefits.
   - Automated Verification: Comprehensive 29-test evaluation suite (`test_events.js`) verifying 100% distinction grade pass (20/20 marks).
+
+---
+
+## 🐳 Practical 11 / 12 Overview
+- **Objective:** Containerize the full-stack MERN application using Docker and orchestrate multiple isolated services (`frontend`, `backend`, `mongodb`) using Docker Compose with internal bridge networking and persistent named volumes.
+- **Key Features:**
+  - Multi-Stage Frontend Dockerfile: Compiles React 19 SPA in `node:18-alpine` build stage, discards devDependencies, and serves static `dist/` bundle on port `5173`.
+  - Node/Express Backend Dockerfile: Lean Alpine container installing production dependencies, exposing port `5000`, and linking to MongoDB via internal service DNS.
+  - Docker Compose Orchestration (`docker-compose.yml`): Single-command orchestrator configuring port bindings (`5173:5173`, `5000:5000`, `27017:27017`), dependency startup chain (`depends_on`), custom bridge network (`app-network`), and named volume (`mongo-data:/data/db`).
+  - Inter-Container DNS Resolution: Backend communicates directly via service name `mongodb://mongodb:27017/taskdb` instead of `localhost`.
+  - Data Persistence: Named volume `mongo-data` guarantees task data survives container restarts and teardowns (`docker-compose down` ➔ `up`).
+  - Interactive Container Topology HUD: Live visualizer of the 3-tier container architecture, bridge network status, and container telemetry API (`/api/tasks/info`).
+  - Oral Viva Examination Guide: 6 curated questions and detailed answers covering multi-stage builds, EXPOSE vs ports, localhost vs service name DNS, and volume persistence.
+  - Automated Verification: Comprehensive 40-test evaluation suite (`test_docker.js`) verifying 100% distinction grade pass (20/20 marks).
+
 
 
 
