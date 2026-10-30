@@ -1,0 +1,29 @@
+{
+  "name": "async-event-driven-taskmanager-24it029",
+  "version": "1.0.0",
+  "description": "Practical 10: Asynchronous Processing with Event-Driven Architecture by Om Italiya (24IT029) - CSPIT CHARUSAT",
+  "private": true,
+  "scripts": {
+    "start:backend": "node backend/server.js",
+    "start:frontend": "npm run dev --prefix frontend",
+    "test": "node test_events.js",
+    "build:frontend": "npm run build --prefix frontend"
+  },
+  "keywords": [
+    "event-emitter",
+    "event-driven-architecture",
+    "asynchronous-processing",
+    "non-blocking",
+    "node-events",
+    "express",
+    "mongodb",
+    "mongoose",
+    "react",
+    "vite",
+    "awdf",
+    "cspit",
+    "charusat"
+  ],
+  "author": "Om Italiya (24IT029)",
+  "license": "MIT"
+}

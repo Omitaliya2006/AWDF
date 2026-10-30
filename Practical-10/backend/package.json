@@ -1,0 +1,19 @@
+{
+  "name": "async-event-driven-backend-24it029",
+  "version": "1.0.0",
+  "description": "Practical 10: Asynchronous Processing with Event-Driven Architecture Backend by Om Italiya (24IT029) - CSPIT CHARUSAT",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5"
+  },
+  "author": "Om Italiya (24IT029)",
+  "license": "MIT"
+}
+

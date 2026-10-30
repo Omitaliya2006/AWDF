@@ -22,6 +22,7 @@
 | **Practical 7** | Authentication and Middleware Pipeline | Node.js, Express, JWT, bcryptjs, React 19 | ✅ Completed | [Practical-7](./Practical-7) |
 | **Practical 8** | Performance Optimization and Lazy Loading in React | React 19, Vite, React.lazy, Suspense | ✅ Completed | [Practical-8](./Practical-8) |
 | **Practical 9** | In-Memory Caching and Query Optimization | Node.js, Express, node-cache, MongoDB, React 19 | ✅ Completed | [Practical-9](./Practical-9) |
+| **Practical 10** | Asynchronous Processing with Event-Driven Architecture | Node.js, EventEmitter, Express, MongoDB, React 19 | ✅ Completed | [Practical-10](./Practical-10) |
 
 ---
 
@@ -130,6 +131,22 @@
     - Automated Empirical Benchmark API: `/api/cache/benchmark` executing high-resolution 5-trial tests.
     - Interactive Cache Monitor HUD & Oral Viva Guide: Real-time cache hit indicator pills, flush button, bypass toggle switch, and 6 curated viva questions & answers.
   - Automated Verification: Comprehensive 39-test evaluation suite (`test_caching.js`) verifying 100% distinction grade pass (20/20 marks).
+
+---
+
+## 📢 Practical 10 Overview
+- **Objective:** Implement asynchronous background processing using Node.js built-in `EventEmitter` without external dependencies, decouple time-consuming notification and audit side effects, and demonstrate non-blocking execution via high-resolution timestamp comparison.
+- **Key Features:**
+  - Event-Driven Architecture: Dedicated `events.js` module creating a shared `TaskEvents` bus inheriting from `EventEmitter`.
+  - Non-Blocking Request-Response Cycle: `POST /tasks` saves task to MongoDB, sends HTTP 201 response immediately at $T_0$ (~15ms), and emits `task-created` event to background listener handled asynchronously at $T_1$ via the Node.js event loop.
+  - Empirical Timestamp Proof: Console logs and HUD timeline strictly verify that HTTP responses are returned hundreds of milliseconds before the background listener completes ($T_1 > T_0$).
+  - Supplementary Work:
+    - Supplementary Event: `task-deleted` event emitted on task removal with distinct audit logging.
+    - Robust Error Listener: `taskEvents.on('error')` catching background worker exceptions to prevent server crashes.
+    - Configurable Background Delay: In-app slider allowing live adjustment of listener delay (0ms to 3000ms).
+    - Live Event Monitor HUD: Visual timeline showing real-time non-blocking time delta ($+606\text{ms}$ gap) and background event stream.
+    - Oral Viva Examination Guide: 6 curated questions and detailed answers covering event loop phases, single-process limits, and decoupling benefits.
+  - Automated Verification: Comprehensive 29-test evaluation suite (`test_events.js`) verifying 100% distinction grade pass (20/20 marks).
 
 
 
