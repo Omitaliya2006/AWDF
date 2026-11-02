@@ -76,3 +76,4 @@ exports.getAIStatus = (req, res) => {
     status
   });
 };
+

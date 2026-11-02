@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWDF Practicals Portal | Om Italiya (24IT029)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary:   #090d16;
+      --bg-card:      #0f1729;
+      --bg-card2:     #141e35;
+      --border:       #1e2d4a;
+      --accent-purple:#8b5cf6;
+      --accent-cyan:  #06b6d4;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-pink:  #ec4899;
+      --text-primary: #f0f4ff;
+      --text-muted:   #64748b;
+      --text-dim:     #94a3b8;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Stars Background ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(139,92,246,.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 60%, rgba(6,182,212,.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 25%, rgba(255,255,255,.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 80%, rgba(139,92,246,.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 40%, rgba(6,182,212,.3) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ── Topbar ── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(9,13,22,.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: .75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+    .topbar-logo .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--accent-purple);
+      box-shadow: 0 0 8px var(--accent-purple);
+      animation: pulse 2s infinite;
+    }
+    .topbar-nav { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .topbar-nav a {
+      font-size: .8rem; color: var(--text-dim); text-decoration: none;
+      padding: .3rem .7rem; border-radius: 6px; border: 1px solid transparent;
+      transition: all .2s;
+    }
+    .topbar-nav a:hover { color: var(--accent-cyan); border-color: var(--accent-cyan); }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 4rem 1rem 2.5rem;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .45rem;
+      font-size: .75rem; font-family: 'Fira Code', monospace;
+      color: var(--accent-purple); background: rgba(139,92,246,.08);
+      border: 1px solid rgba(139,92,246,.25); border-radius: 99px;
+      padding: .35rem .9rem; margin-bottom: 1.5rem;
+    }
+    .hero-badge .live-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 6px var(--accent-green);
+      animation: pulse 1.5s infinite;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.15;
+      background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-purple) 70%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+    .hero-sub {
+      font-size: 1.05rem; color: var(--text-dim); max-width: 640px; margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+    .hero-meta {
+      display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
+      font-size: .85rem; color: var(--text-muted);
+    }
+    .hero-meta span { display: flex; align-items: center; gap: .3rem; }
+
+    /* ── Stats Bar ── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      text-align: center;
+      transition: transform .2s, border-color .2s;
+    }
+    .stat-card:hover { transform: translateY(-3px); border-color: var(--accent-purple); }
+    .stat-card .val {
+      font-size: 1.8rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .stat-card .lbl { font-size: .75rem; color: var(--text-muted); margin-top: .25rem; }
+
+    /* ── Section heading ── */
+    .section-head {
+      display: flex; align-items: center; gap: .75rem; margin-bottom: 1.5rem;
+    }
+    .section-head h2 {
+      font-size: 1.3rem; font-weight: 700; color: var(--text-primary);
+    }
+    .pill {
+      font-size: .7rem; font-family: 'Fira Code', monospace;
+      background: rgba(139,92,246,.12); color: var(--accent-purple);
+      border: 1px solid rgba(139,92,246,.25); border-radius: 99px;
+      padding: .2rem .6rem;
+    }
+    .section-line {
+      flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    /* ── Practical Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.25rem;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+      display: flex; flex-direction: column;
+      position: relative;
+    }
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+      opacity: 0; transition: opacity .25s;
+    }
+    .card:hover { transform: translateY(-5px); border-color: var(--accent-purple); box-shadow: 0 12px 30px rgba(139,92,246,.15); }
+    .card:hover::before { opacity: 1; }
+
+    .card-num {
+      position: absolute; top: 1rem; right: 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: .7rem; font-weight: 500;
+      color: var(--accent-purple); opacity: .6;
+    }
+    .card-body { padding: 1.4rem; flex: 1; }
+    .card-badge {
+      display: inline-flex; align-items: center; gap: .35rem;
+      font-size: .68rem; font-family: 'Fira Code', monospace;
+      color: var(--accent-green); background: rgba(16,185,129,.08);
+      border: 1px solid rgba(16,185,129,.2); border-radius: 6px;
+      padding: .2rem .55rem; margin-bottom: .85rem;
+    }
+    .card-badge .green-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent-green); box-shadow: 0 0 5px var(--accent-green);
+    }
+    .card h3 {
+      font-size: .97rem; font-weight: 700; line-height: 1.4;
+      color: var(--text-primary); margin-bottom: .6rem;
+    }
+    .card-copo {
+      font-size: .72rem; color: var(--text-muted);
+      font-family: 'Fira Code', monospace;
+      margin-bottom: .75rem;
+    }
+    .card-stack {
+      font-size: .78rem; color: var(--text-dim); line-height: 1.5;
+      margin-bottom: .85rem;
+    }
+    .card-marks {
+      display: inline-block;
+      font-size: .78rem; font-weight: 600;
+      color: var(--accent-amber);
+      background: rgba(245,158,11,.08);
+      border: 1px solid rgba(245,158,11,.2); border-radius: 6px;
+      padding: .2rem .55rem;
+    }
+    .card-footer {
+      padding: 1rem 1.4rem;
+      border-top: 1px solid var(--border);
+      background: var(--bg-card2);
+    }
+    .launch-btn {
+      display: flex; align-items: center; justify-content: center; gap: .5rem;
+      width: 100%;
+      padding: .6rem 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: .85rem; font-weight: 600;
+      background: linear-gradient(135deg, var(--accent-purple), rgba(6,182,212,.8));
+      color: #fff;
+      border: none; cursor: pointer;
+      transition: opacity .2s, transform .15s;
+    }
+    .launch-btn:hover { opacity: .88; transform: scale(1.02); }
+    .launch-btn svg { width: 15px; height: 15px; }
+
+    /* ── API Endpoints Panel ── */
+    .api-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: .75rem;
+    }
+    .api-row {
+      display: flex; align-items: center; gap: .6rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: .65rem 1rem;
+      font-family: 'Fira Code', monospace; font-size: .78rem;
+      transition: border-color .2s;
+      text-decoration: none; color: var(--text-dim);
+    }
+    .api-row:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+    .method {
+      font-size: .65rem; font-weight: 700; padding: .15rem .45rem;
+      border-radius: 4px; flex-shrink: 0;
+    }
+    .get  { background: rgba(16,185,129,.12); color: var(--accent-green); }
+    .post { background: rgba(139,92,246,.12); color: var(--accent-purple); }
+    .api-path { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* ── Status Panel ── */
+    .status-panel {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.5rem;
+    }
+    .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .status-item { display: flex; flex-direction: column; gap: .3rem; }
+    .status-lbl { font-size: .73rem; color: var(--text-muted); }
+    .status-val { font-size: .9rem; font-weight: 600; font-family: 'Fira Code', monospace; }
+    .ok    { color: var(--accent-green); }
+    .warn  { color: var(--accent-amber); }
+    .error { color: #f87171; }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 4rem; padding: 2.5rem 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    footer p { font-size: .83rem; color: var(--text-muted); line-height: 1.8; }
+    footer a { color: var(--accent-purple); text-decoration: none; }
+    footer a:hover { color: var(--accent-cyan); }
+
+    /* ── Animations ── */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .5; transform: scale(1.15); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card { animation: fadeUp .4s ease both; }
+    .card:nth-child(1)  { animation-delay: .05s; }
+    .card:nth-child(2)  { animation-delay: .08s; }
+    .card:nth-child(3)  { animation-delay: .11s; }
+    .card:nth-child(4)  { animation-delay: .14s; }
+    .card:nth-child(5)  { animation-delay: .17s; }
+    .card:nth-child(6)  { animation-delay: .20s; }
+    .card:nth-child(7)  { animation-delay: .23s; }
+    .card:nth-child(8)  { animation-delay: .26s; }
+    .card:nth-child(9)  { animation-delay: .29s; }
+    .card:nth-child(10) { animation-delay: .32s; }
+    .card:nth-child(11) { animation-delay: .35s; }
+    .card:nth-child(12) { animation-delay: .38s; }
+    .card:nth-child(13) { animation-delay: .41s; }
+
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 1.8rem; }
+      .topbar-nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Topbar ── -->
+<nav class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-logo">
+      <div class="dot"></div>
+      AWDF Portal &mdash; 24IT029
+    </div>
+    <div class="topbar-nav">
+      <a href="#practicals">Practicals</a>
+      <a href="#api">API</a>
+      <a href="#status">Status</a>
+      <a href="https://github.com/Omitaliya2006/AWDF" target="_blank">GitHub ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<div class="wrap">
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="live-dot"></span>
+      All 13 Practicals Live &bull; http://localhost:5000
+    </div>
+    <h1>Advanced Web Development<br/>Frameworks Portal</h1>
+    <p class="hero-sub">
+      A unified single-URL hub serving all 13 AWDF practicals — React, Node, MongoDB,
+      JWT, Docker, GitHub Actions, AI Integration and more — developed by Om Italiya.
+    </p>
+    <div class="hero-meta">
+      <span>👤 Om Italiya</span>
+      <span>🎓 24IT029</span>
+      <span>🏛️ CSPIT, CHARUSAT</span>
+      <span>📚 Information Technology</span>
+    </div>
+  </section>
+
+  <!-- ── Stats ── -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="val">13</div>
+      <div class="lbl">Practicals</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">260</div>
+      <div class="lbl">Total Marks (20×13)</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" id="stat-uptime">—</div>
+      <div class="lbl">Server Status</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" id="stat-db">—</div>
+      <div class="lbl">Database Mode</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">MERN</div>
+      <div class="lbl">Core Stack</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">&lt;1ms</div>
+      <div class="lbl">Cache Response</div>
+    </div>
+  </div>
+
+  <!-- ── Practicals Grid ── -->
+  <section id="practicals" style="margin-bottom: 3rem;">
+    <div class="section-head">
+      <h2>All Practicals</h2>
+      <span class="pill">13 / 13 Live</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="grid" id="practical-grid">
+      <!-- Injected by JS -->
+    </div>
+  </section>
+
+  <!-- ── API Endpoints ── -->
+  <section id="api" style="margin-bottom: 3rem;">
+    <div class="section-head">
+      <h2>Unified API Endpoints</h2>
+      <span class="pill">Master Gateway</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="api-grid">
+      <a class="api-row" href="/api/health" target="_blank">
+        <span class="method get">GET</span>
+        <span class="api-path">/api/health</span>
+      </a>
+      <a class="api-row" href="/api/portal/summary" target="_blank">
+        <span class="method get">GET</span>
+        <span class="api-path">/api/portal/summary</span>
+      </a>
+      <a class="api-row" href="/api/tasks" target="_blank">
+        <span class="method get">GET</span>
+        <span class="api-path">/api/tasks</span>
+      </a>
+      <a class="api-row" href="/api/tasks?status=completed" target="_blank">
+        <span class="method get">GET</span>
+        <span class="api-path">/api/tasks?status=completed</span>
+      </a>
+      <a class="api-row" href="/api/tasks?priority=high" target="_blank">
+        <span class="method get">GET</span>
+        <span class="api-path">/api/tasks?priority=high</span>
+      </a>
+      <a class="api-row" href="/api/cache/stats" target="_blank">
+        <span class="method get">GET</span>
+        <span class="api-path">/api/cache/stats</span>
+      </a>
+      <a class="api-row" href="/api/events/history" target="_blank">
+        <span class="method get">GET</span>
+        <span class="api-path">/api/events/history</span>
+      </a>
+      <a class="api-row" href="/api/logs" target="_blank">
+        <span class="method get">GET</span>
+        <span class="api-path">/api/logs</span>
+      </a>
+      <div class="api-row" style="cursor:default;">
+        <span class="method post">POST</span>
+        <span class="api-path">/api/auth/register</span>
+      </div>
+      <div class="api-row" style="cursor:default;">
+        <span class="method post">POST</span>
+        <span class="api-path">/api/auth/login</span>
+      </div>
+      <div class="api-row" style="cursor:default;">
+        <span class="method post">POST</span>
+        <span class="api-path">/api/tasks (+ JWT)</span>
+      </div>
+      <div class="api-row" style="cursor:default;">
+        <span class="method post">POST</span>
+        <span class="api-path">/api/ai/generate-description</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Server Status ── -->
+  <section id="status" style="margin-bottom: 3rem;">
+    <div class="section-head">
+      <h2>Live Server Status</h2>
+      <span class="pill" id="status-ping">Fetching…</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="status-panel">
+      <div class="status-grid" id="status-grid">
+        <div class="status-item">
+          <span class="status-lbl">System</span>
+          <span class="status-val ok" id="s-system">Loading…</span>
+        </div>
+        <div class="status-item">
+          <span class="status-lbl">Database</span>
+          <span class="status-val" id="s-db">Loading…</span>
+        </div>
+        <div class="status-item">
+          <span class="status-lbl">Practicals Active</span>
+          <span class="status-val ok" id="s-active">Loading…</span>
+        </div>
+        <div class="status-item">
+          <span class="status-lbl">Timestamp</span>
+          <span class="status-val" id="s-ts" style="color:var(--text-dim)">Loading…</span>
+        </div>
+        <div class="status-item">
+          <span class="status-lbl">Student</span>
+          <span class="status-val" style="color:var(--accent-purple)">Om Italiya (24IT029)</span>
+        </div>
+        <div class="status-item">
+          <span class="status-lbl">GitHub</span>
+          <span class="status-val">
+            <a href="https://github.com/Omitaliya2006/AWDF" target="_blank" style="color:var(--accent-cyan);text-decoration:none;">Omitaliya2006/AWDF ↗</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <p>
+    <strong style="color:var(--text-primary)">AWDF All-Practicals Portal</strong><br/>
+    Om Italiya &bull; Roll No: 24IT029 &bull; CSPIT, CHARUSAT<br/>
+    Information Technology &bull; Advanced Web Development Frameworks<br/><br/>
+    <a href="https://github.com/Omitaliya2006/AWDF" target="_blank">🔗 github.com/Omitaliya2006/AWDF</a>
+    &nbsp;&bull;&nbsp;
+    <a href="/api/health" target="_blank">📊 Health API</a>
+    &nbsp;&bull;&nbsp;
+    <a href="/api/portal/summary" target="_blank">📋 Summary API</a>
+  </p>
+</footer>
+
+<script>
+  /* ─── Practical metadata ─────────────────────────────────────────────── */
+  const practicals = [
+    {
+      id: 1,
+      title: 'Introduction to React and Component Architecture',
+      copo: 'CO1 / PO3, PO5',
+      stack: 'React 19, Vite, Modular CSS, Props System',
+      marks: '20 / 20',
+      co: 'CO1'
+    },
+    {
+      id: 2,
+      title: 'State Management and Routing in React',
+      copo: 'CO1 / PO3, PO5',
+      stack: 'React 19, React Router v6, useState, Multi-Page SPA',
+      marks: '20 / 20',
+      co: 'CO1'
+    },
+    {
+      id: 3,
+      title: 'REST API Integration & Data Rendering in React',
+      copo: 'CO1, CO2 / PO3, PO5',
+      stack: 'React 19, GitHub REST API, useEffect, Error Boundaries',
+      marks: '20 / 20',
+      co: 'CO2'
+    },
+    {
+      id: 4,
+      title: 'Building a RESTful API with Node.js and Express',
+      copo: 'CO2 / PO3, PO5',
+      stack: 'Node.js, Express.js, Middleware Pipeline, Morgan',
+      marks: '20 / 20',
+      co: 'CO2'
+    },
+    {
+      id: 5,
+      title: 'MongoDB Integration and Schema Design with Mongoose',
+      copo: 'CO2, CO3 / PO3, PO5',
+      stack: 'Express, MongoDB, Mongoose ODM, Schema Validation',
+      marks: '20 / 20',
+      co: 'CO3'
+    },
+    {
+      id: 6,
+      title: 'Full Stack Integration (React + Express + MongoDB)',
+      copo: 'CO1, CO2 / PO3, PO5',
+      stack: 'MERN Stack, 3-Tier Architecture, Task Management',
+      marks: '20 / 20',
+      co: 'CO2'
+    },
+    {
+      id: 7,
+      title: 'Authentication and Middleware Pipeline',
+      copo: 'CO2, CO6 / PO3, PO5',
+      stack: 'JWT, bcryptjs, Protected Routes, Auth Middleware',
+      marks: '20 / 20',
+      co: 'CO6'
+    },
+    {
+      id: 8,
+      title: 'Performance Optimization and Lazy Loading in React',
+      copo: 'CO1 / PO3, PO5',
+      stack: 'React.lazy, Suspense, Code-Splitting, Memoization',
+      marks: '20 / 20',
+      co: 'CO1'
+    },
+    {
+      id: 9,
+      title: 'In-Memory Caching and Query Optimization',
+      copo: 'CO2, CO4 / PO3, PO5',
+      stack: 'node-cache, Cache-Aside Pattern, TTL, Invalidation',
+      marks: '20 / 20',
+      co: 'CO4'
+    },
+    {
+      id: 10,
+      title: 'Asynchronous Processing with Event-Driven Architecture',
+      copo: 'CO4 / PO3, PO5',
+      stack: 'Node.js EventEmitter, Observer Pattern, Async Queue',
+      marks: '20 / 20',
+      co: 'CO4'
+    },
+    {
+      id: 11,
+      title: 'Containerization with Docker and Docker Compose',
+      copo: 'CO5 / PO3, PO5',
+      stack: 'Docker, Docker Compose, Multi-Stage Builds, Alpine',
+      marks: '20 / 20',
+      co: 'CO5'
+    },
+    {
+      id: 12,
+      title: 'CI/CD Pipeline with GitHub Actions',
+      copo: 'CO5 / PO3, PO5',
+      stack: 'GitHub Actions, Jest, Ubuntu Runner, Automated Testing',
+      marks: '20 / 20',
+      co: 'CO5'
+    },
+    {
+      id: 13,
+      title: 'AI API Integration into a Web Application',
+      copo: 'CO6 / PO3, PO5, PO12',
+      stack: 'OpenAI API, Graceful Degradation, Rate Limiter, React UI',
+      marks: '20 / 20',
+      co: 'CO6'
+    }
+  ];
+
+  /* ─── Render grid ────────────────────────────────────────────────────── */
+  function buildGrid() {
+    const grid = document.getElementById('practical-grid');
+    grid.innerHTML = practicals.map(p => `
+      <div class="card">
+        <span class="card-num">P${String(p.id).padStart(2,'0')}</span>
+        <div class="card-body">
+          <div class="card-badge">
+            <span class="green-dot"></span>
+            LIVE &bull; ${p.co}
+          </div>
+          <h3>${p.title}</h3>
+          <div class="card-copo">${p.copo}</div>
+          <div class="card-stack">${p.stack}</div>
+          <span class="card-marks">⭐ ${p.marks}</span>
+        </div>
+        <div class="card-footer">
+          <a class="launch-btn" href="/practical-${p.id}/" target="_blank">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+            Launch Practical ${p.id}
+          </a>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  /* ─── Fetch health status ─────────────────────────────────────────────── */
+  async function loadHealth() {
+    try {
+      const r = await fetch('/api/health');
+      const d = await r.json();
+      document.getElementById('stat-uptime').textContent = d.status === 'ok' ? '🟢 UP' : '🔴 DOWN';
+      document.getElementById('stat-db').textContent = d.databaseMode.includes('MongoDB') ? 'Mongo' : 'Memory';
+      document.getElementById('s-system').textContent = d.system || 'AWDF Portal';
+      const dbEl = document.getElementById('s-db');
+      dbEl.textContent = d.databaseMode;
+      dbEl.className = 'status-val ' + (d.databaseMode.includes('MongoDB') ? 'ok' : 'warn');
+      document.getElementById('s-active').textContent = d.activePracticals + ' / ' + d.totalPracticals;
+      document.getElementById('s-ts').textContent = new Date(d.timestamp).toLocaleString();
+      document.getElementById('status-ping').textContent = '✅ Online';
+    } catch (e) {
+      document.getElementById('stat-uptime').textContent = '🔴 DOWN';
+      document.getElementById('status-ping').textContent = '❌ Offline';
+    }
+  }
+
+  buildGrid();
+  loadHealth();
+  setInterval(loadHealth, 15000); // Refresh every 15 s
+</script>
+</body>
+</html>

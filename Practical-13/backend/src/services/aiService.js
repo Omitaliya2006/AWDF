@@ -195,3 +195,4 @@ Format response as JSON with keys: "description", "priority", "estimatedDays".`;
 }
 
 module.exports = new AIService();
+

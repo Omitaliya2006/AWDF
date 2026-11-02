@@ -39,3 +39,4 @@ const Navbar = ({ onOpenViva }) => {
 };
 
 export default Navbar;
+

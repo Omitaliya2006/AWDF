@@ -128,3 +128,4 @@ const TaskItem = ({ task, onUpdate, onDelete, onToast }) => {
 };
 
 export default TaskItem;
+

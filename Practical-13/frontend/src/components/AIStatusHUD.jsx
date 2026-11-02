@@ -112,3 +112,4 @@ const AIStatusHUD = ({ aiStatus, onSimulateFailure }) => {
 };
 
 export default AIStatusHUD;
+

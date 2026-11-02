@@ -1,0 +1,23 @@
+{
+  "name": "awdf-all-practicals-hub",
+  "version": "1.0.0",
+  "description": "Unified Master Hub & Portal for all 13 AWDF Practicals (Om Italiya - 24IT029)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test:all": "node test_all.js"
+  },
+  "author": "Om Italiya (24IT029)",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.3.1",
+    "node-cache": "^5.1.2"
+  }
+}
+
